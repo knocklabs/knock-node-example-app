@@ -63,3 +63,11 @@ model Token {
 // enum TokenType {
 //   RESET_PASSWORD
 // }
+
+model Workspace {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  name      String
+  slug      String
+}
