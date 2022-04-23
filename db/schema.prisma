@@ -24,6 +24,7 @@ model User {
   tokens         Token[]
   sessions       Session[]
   Workspace_seat Workspace_seat[]
+  Project_member Project_member[]
 }
 
 model Session {
@@ -73,6 +74,7 @@ model Workspace {
   slug           String
   Workspace_seat Workspace_seat[]
   Project        Project[]
+  Project_member Project_member[]
 }
 
 model Workspace_seat {
@@ -86,10 +88,23 @@ model Workspace_seat {
 }
 
 model Project {
+  id             Int              @id @default(autoincrement())
+  createdAt      DateTime         @default(now())
+  updatedAt      DateTime         @updatedAt
+  name           String
+  workspace      Workspace        @relation(fields: [workspaceId], references: [id])
+  workspaceId    Int
+  Project_member Project_member[]
+}
+
+model Project_member {
   id          Int       @id @default(autoincrement())
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
-  name        String
   workspace   Workspace @relation(fields: [workspaceId], references: [id])
   workspaceId Int
+  project     Project   @relation(fields: [projectId], references: [id])
+  projectId   Int
+  user        User      @relation(fields: [userId], references: [id])
+  userId      Int
 }
