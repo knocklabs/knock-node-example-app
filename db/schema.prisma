@@ -24,7 +24,7 @@ model User {
   tokens         Token[]
   sessions       Session[]
   Workspace_seat Workspace_seat[]
-  Project_member Project_member[]
+  projectMembers Project_member[]
   Asset          Asset[]
   Comment        Comment[]
 }
@@ -76,7 +76,7 @@ model Workspace {
   slug           String
   Workspace_seat Workspace_seat[]
   Project        Project[]
-  Project_member Project_member[]
+  projectMembers Project_member[]
   Asset          Asset[]
   Comment        Comment[]
 }
@@ -98,7 +98,7 @@ model Project {
   name           String
   workspace      Workspace        @relation(fields: [workspaceId], references: [id])
   workspaceId    Int
-  Project_member Project_member[]
+  projectMembers Project_member[]
   Asset          Asset[]
   Comment        Comment[]
 }
