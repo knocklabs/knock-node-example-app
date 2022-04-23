@@ -25,6 +25,7 @@ model User {
   sessions       Session[]
   Workspace_seat Workspace_seat[]
   Project_member Project_member[]
+  Asset          Asset[]
 }
 
 model Session {
@@ -75,6 +76,7 @@ model Workspace {
   Workspace_seat Workspace_seat[]
   Project        Project[]
   Project_member Project_member[]
+  Asset          Asset[]
 }
 
 model Workspace_seat {
@@ -95,6 +97,7 @@ model Project {
   workspace      Workspace        @relation(fields: [workspaceId], references: [id])
   workspaceId    Int
   Project_member Project_member[]
+  Asset          Asset[]
 }
 
 model Project_member {
@@ -107,4 +110,19 @@ model Project_member {
   projectId   Int
   user        User      @relation(fields: [userId], references: [id])
   userId      Int
+}
+
+model Asset {
+  id          Int       @id @default(autoincrement())
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  workspace   Workspace @relation(fields: [workspaceId], references: [id])
+  workspaceId Int
+  project     Project   @relation(fields: [projectId], references: [id])
+  projectId   Int
+  author      User      @relation(fields: [authorId], references: [id])
+  authorId    Int
+  name        String
+  description String
+  url         String
 }
