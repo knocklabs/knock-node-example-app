@@ -70,7 +70,7 @@ const seed = async () => {
         data: {
           workspaceId: ingen.id,
           projectId: jurassicPark.id,
-          userId: jhammond.id,
+          userId: u.id,
         },
       })
     })

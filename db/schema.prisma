@@ -75,7 +75,7 @@ model Workspace {
   name           String
   slug           String
   Workspace_seat Workspace_seat[]
-  Project        Project[]
+  projects       Project[]
   projectMembers Project_member[]
   Asset          Asset[]
   Comment        Comment[]
@@ -92,15 +92,15 @@ model Workspace_seat {
 }
 
 model Project {
-  id             Int              @id @default(autoincrement())
-  createdAt      DateTime         @default(now())
-  updatedAt      DateTime         @updatedAt
-  name           String
-  workspace      Workspace        @relation(fields: [workspaceId], references: [id])
-  workspaceId    Int
-  projectMembers Project_member[]
-  Asset          Asset[]
-  Comment        Comment[]
+  id          Int              @id @default(autoincrement())
+  createdAt   DateTime         @default(now())
+  updatedAt   DateTime         @updatedAt
+  name        String
+  workspace   Workspace        @relation(fields: [workspaceId], references: [id])
+  workspaceId Int
+  members     Project_member[]
+  assets      Asset[]
+  comments    Comment[]
 }
 
 model Project_member {
