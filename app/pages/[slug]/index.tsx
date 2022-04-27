@@ -6,7 +6,7 @@ import getWorkspace from "app/workspaces/queries/getWorkspace"
 const WorkspacePageComponent = () => {
   const router = useRouter()
   const slug = useParam("slug", "string")
-  const [workspace, { setQueryData }] = useQuery(getWorkspace, { slug })
+  const [workspace] = useQuery(getWorkspace, { slug })
 
   useEffect(() => {
     if (workspace?.projects) {

@@ -12,7 +12,7 @@ type LoginFormProps = {
 }
 
 export const LoginForm = (props: LoginFormProps) => {
-  const [loginMutation, { loading }] = useMutation(login)
+  const [loginMutation] = useMutation(login)
 
   return (
     <Flex
