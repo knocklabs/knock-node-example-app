@@ -54,7 +54,7 @@ const seed = async () => {
   const [jhammond, dnedry, agrant, imalcolm, esattler] = users
 
   const ingen = await db.workspace.create({
-    data: { name: "Ingen", slug: "Ingen" },
+    data: { name: "Ingen", slug: "ingen" },
   })
 
   const jurassicPark = await db.project.create({

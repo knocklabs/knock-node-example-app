@@ -73,7 +73,7 @@ model Workspace {
   createdAt      DateTime         @default(now())
   updatedAt      DateTime         @updatedAt
   name           String
-  slug           String
+  slug           String           @unique
   Workspace_seat Workspace_seat[]
   projects       Project[]
   projectMembers Project_member[]
@@ -128,7 +128,7 @@ model Asset {
   name        String
   description String
   url         String
-  Comment     Comment[]
+  comments    Comment[]
 }
 
 model Comment {
