@@ -46,7 +46,7 @@ const AssetPageComponent = () => {
           borderLeftWidth={1}
           borderLeftColor="gray.200"
           position="relative"
-          height="100%"
+          height="calc(100vh - 48px)"
         >
           <Box borderBottomColor="gray.200" borderBottomWidth={1} p={4}>
             <Text fontSize="sm">
