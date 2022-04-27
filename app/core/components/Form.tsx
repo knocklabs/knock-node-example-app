@@ -48,7 +48,7 @@ export function Form<S extends z.ZodType<any, any>>({
       }}
     >
       {({ handleSubmit, isSubmitting }) => (
-        <Box as="form" onSubmit={handleSubmit} {...props}>
+        <form onSubmit={handleSubmit} {...props}>
           {/* Form fields supplied as children are rendered here */}
           {children}
 
@@ -63,7 +63,7 @@ export function Form<S extends z.ZodType<any, any>>({
               {submitText}
             </Button>
           )}
-        </Box>
+        </form>
       )}
     </Formik>
   )

@@ -9,7 +9,7 @@ import { useCurrentUser } from "app/core/hooks/useCurrentUser"
 import createComment from "app/comments/mutations/createComment"
 
 const CommentList = ({ asset, project, slug, refetch }) => {
-  const paneRef = useRef()
+  const paneRef = useRef<HTMLDivElement>(null)
   const [commentText, setCommentText] = useState("")
   const user = useCurrentUser()
 
@@ -31,7 +31,7 @@ const CommentList = ({ asset, project, slug, refetch }) => {
       },
       author: {
         connect: {
-          id: user.id,
+          id: user?.id!,
         },
       },
       project: {
@@ -41,7 +41,6 @@ const CommentList = ({ asset, project, slug, refetch }) => {
       },
       workspace: {
         connect: {
-          // id: 1,
           slug,
         },
       },
@@ -54,9 +53,13 @@ const CommentList = ({ asset, project, slug, refetch }) => {
 
   useEffect(() => {
     const comment = asset.comments[asset.comments.length - 1]
-    const item = (paneRef.current as HTMLElement).querySelector(`[data-id='${comment.id}']`)
+    const paneElement: HTMLDivElement | null = paneRef?.current
 
-    if (item) item.scrollIntoView()
+    if (paneElement) {
+      const item = paneElement.querySelector(`[data-id='${comment.id}']`)
+
+      if (item) item.scrollIntoView()
+    }
   }, [asset])
 
   return (
@@ -96,7 +99,6 @@ const CommentList = ({ asset, project, slug, refetch }) => {
             value={commentText}
             onChange={(e) => setCommentText(e.target.value)}
           />
-          {/* <Button type="submit" size="xs" ml="auto" mt={1} isLoading={loading}> */}
           <Button type="submit" size="xs" ml="auto" mt={1}>
             Send
           </Button>

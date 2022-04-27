@@ -3,7 +3,11 @@ import { Spinner, Avatar } from "@chakra-ui/react"
 import { useRouter } from "blitz"
 import { useCurrentUser } from "app/core/hooks/useCurrentUser"
 
-const Layout: React.FC = ({ children }) => {
+type Props = {
+  children?: React.ReactElement
+}
+
+const Layout: React.FC<Props> = ({ children }) => {
   const router = useRouter()
   const { slug } = router.query
   const user = useCurrentUser()
@@ -27,8 +31,7 @@ const Layout: React.FC = ({ children }) => {
         >
           Collab
         </Text>
-
-        <Avatar ml="auto" size="xs" name={user.name} />
+        {user?.name ? <Avatar ml="auto" size="xs" name={user.name} /> : ""}
       </Flex>
       <Box flex={1} width="100%">
         {children}

@@ -14,6 +14,11 @@ const ProjectPageComponent = () => {
   const id = useParam("projectId", "number")
   const [project, { setQueryData }] = useQuery(getProject, { id })
 
+  if (!slug || !project) {
+    router.push("/")
+    return <Spinner />
+  }
+
   return (
     <Layout>
       <Flex flex={1} height="100%">
@@ -32,7 +37,7 @@ const ProjectPageComponent = () => {
                 borderRadius="md"
                 overflow="hidden"
               >
-                <Link href={Routes.AssetPage({ slug, projectId: id, assetId: asset.id })}>
+                <Link href={Routes.AssetPage({ slug, projectId: project.id, assetId: asset.id })}>
                   <a>
                     <AspectRatio width="100%" ratio={16 / 9}>
                       <Image src={asset.url} objectFit="cover" alt="Image" />
@@ -67,7 +72,7 @@ const ProjectPageComponent = () => {
             <UnorderedList listStyleType="none" m={0} p={0}>
               {project.members?.map((member) => (
                 <ListItem key={member.id} display="flex" alignItems="center" m={0} p={0} mb={2}>
-                  <Avatar name={member.user.name} size="sm" mr={2} />
+                  {member.user.name && <Avatar name={member.user.name} size="sm" mr={2} />}
                   <Text fontSize="sm" fontWeight="semibold">
                     {member.user.name}
                   </Text>

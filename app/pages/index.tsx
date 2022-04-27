@@ -17,9 +17,13 @@ const HomePage = () => {
       router.push("/login")
     } else if (workspacesResponse?.workspaces) {
       const workspace = workspacesResponse.workspaces[0]
-      const project = workspace.projects[0]
+      const project = workspace?.projects[0]
 
-      router.push(Routes.ProjectPage({ slug: workspace.slug, projectId: project.id }))
+      if (workspace && project) {
+        router.push(Routes.ProjectPage({ slug: workspace.slug, projectId: project?.id }))
+      } else {
+        router.push("/")
+      }
     }
   }, [])
 

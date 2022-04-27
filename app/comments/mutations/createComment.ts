@@ -10,9 +10,11 @@ const CreateComment = z.object({
     }),
   }),
   author: z.object({
-    connect: z.object({
-      id: z.number(),
-    }),
+    connect: z
+      .object({
+        id: z.number(),
+      })
+      .optional(),
   }),
   project: z.object({
     connect: z.object({

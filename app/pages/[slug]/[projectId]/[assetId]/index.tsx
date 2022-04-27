@@ -17,6 +17,11 @@ const AssetPageComponent = () => {
 
   const project = asset.project
 
+  if (!project || !slug) {
+    router.push("/")
+    return <Spinner />
+  }
+
   return (
     <Layout>
       <Flex flex={1}>

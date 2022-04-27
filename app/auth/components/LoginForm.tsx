@@ -28,7 +28,6 @@ export const LoginForm = (props: LoginFormProps) => {
 
         <Flex mt={6} w="400px">
           <Form
-            w="100%"
             submitText="Login"
             initialValues={{ email: "", password: "" }}
             schema={Login}
