@@ -30,11 +30,7 @@ Finally, we can start the development server by running:
 blitz dev
 ```
 
-You can take a look at the dummy users credentials on the seed file.
-
-```
-blitz dev
-```
+You can take a look at the dummy users credentials on the seed file in order to log in.
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
