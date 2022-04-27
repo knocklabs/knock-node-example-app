@@ -1,11 +1,11 @@
-import { useRouter, useParam, useQuery } from "blitz"
+import { BlitzPage, useRouter, useParam, useQuery, Link, Routes } from "blitz"
 import { useEffect, Suspense } from "react"
+
 import getProject from "app/projects/queries/getProject"
 
 import { Avatar } from "@chakra-ui/avatar"
 import { AspectRatio, Box, Flex, Heading, ListItem, Text, UnorderedList } from "@chakra-ui/layout"
 import { Image, Spinner } from "@chakra-ui/react"
-import Link from "next/link"
 import Layout from "app/core/components/Layout"
 
 const ProjectPageComponent = () => {
@@ -32,7 +32,7 @@ const ProjectPageComponent = () => {
                 borderRadius="md"
                 overflow="hidden"
               >
-                <Link href={`${slug}/${project.id}/${asset.id}`}>
+                <Link href={Routes.AssetPage({ slug, projectId: id, assetId: asset.id })}>
                   <a>
                     <AspectRatio width="100%" ratio={16 / 9}>
                       <Image src={asset.url} objectFit="cover" alt="Image" />
