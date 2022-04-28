@@ -74,7 +74,7 @@ model Workspace {
   updatedAt      DateTime         @updatedAt
   name           String
   slug           String           @unique
-  Workspace_seat Workspace_seat[]
+  seats          Workspace_seat[]
   projects       Project[]
   projectMembers Project_member[]
   Asset          Asset[]

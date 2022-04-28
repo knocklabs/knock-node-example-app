@@ -12,6 +12,7 @@ export const password = z
   .transform((str) => str.trim())
 
 export const Signup = z.object({
+  name: z.string(),
   email,
   password,
 })
