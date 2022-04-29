@@ -1,18 +1,43 @@
-import { BlitzPage, useRouter, useParam, useQuery, Link, Routes } from "blitz"
-import { useEffect, Suspense } from "react"
+import { BlitzPage, useRouter, useParam, useQuery, useMutation, Link, Routes } from "blitz"
+import { useEffect, useState, useRef, Suspense } from "react"
 
+import Layout from "app/core/components/Layout"
 import getProject from "app/projects/queries/getProject"
+import createAsset from "app/assets/mutations/createAsset"
+import { Form } from "app/core/components/Form"
 
 import { Avatar } from "@chakra-ui/avatar"
 import { AspectRatio, Box, Flex, Heading, ListItem, Text, UnorderedList } from "@chakra-ui/layout"
-import { Image, Spinner } from "@chakra-ui/react"
-import Layout from "app/core/components/Layout"
+import {
+  Image,
+  Spinner,
+  Button,
+  FormControl,
+  Modal,
+  ModalBody,
+  ModalCloseButton,
+  ModalContent,
+  ModalHeader,
+  ModalOverlay,
+  useDisclosure,
+} from "@chakra-ui/react"
+import { Input } from "@chakra-ui/input"
+import { Field } from "formik"
 
 const ProjectPageComponent = () => {
   const router = useRouter()
   const slug = useParam("slug", "string")
   const id = useParam("projectId", "number")
-  const [project, { setQueryData }] = useQuery(getProject, { id })
+  const [project, { refetch }] = useQuery(getProject, { id })
+
+  const initialFocusRef = useRef<FocusableElement>(null)
+  const { isOpen, onOpen, onClose } = useDisclosure()
+
+  const [createAssetMutation] = useMutation(createAsset, {
+    onSuccess: () => {
+      refetch()
+    },
+  })
 
   if (!slug || !project) {
     router.push("/")
@@ -25,6 +50,9 @@ const ProjectPageComponent = () => {
         <Box p={6} width="100%" position="relative">
           <Heading size="lg" mb={6}>
             {project.name}
+            <Button ml={4} onClick={onOpen}>
+              Create asset
+            </Button>
           </Heading>
 
           <Flex>
@@ -36,6 +64,7 @@ const ProjectPageComponent = () => {
                 borderColor="gray.200"
                 borderRadius="md"
                 overflow="hidden"
+                ml={4}
               >
                 <Link href={Routes.AssetPage({ slug, projectId: project.id, assetId: asset.id })}>
                   <a>
@@ -82,6 +111,86 @@ const ProjectPageComponent = () => {
           </Box>
         </Flex>
       </Flex>
+      <Modal isOpen={isOpen} initialFocusef={initialFocusRef} onClose={onClose}>
+        <ModalOverlay />
+        <ModalContent overflow="hidden">
+          <ModalHeader p={5} bg="red.200" borderColor="black" borderBottomWidth={1}>
+            Create asset
+          </ModalHeader>
+          <ModalCloseButton />
+
+          <ModalBody p={5}>
+            <Box background="beige.100">
+              <Form
+                submitText="Create"
+                initialValues={{ name: "", description: "", url: "" }}
+                onSubmit={async (values) => {
+                  await createAssetMutation({
+                    workspace: {
+                      connect: {
+                        slug: slug,
+                      },
+                    },
+                    project: {
+                      connect: {
+                        id: project.id,
+                      },
+                    },
+                    ...values,
+                  })
+                  onClose()
+                }}
+              >
+                <FormControl>
+                  <Text
+                    as="label"
+                    textStyle="formLabel"
+                    color="gray.600"
+                    textAlign="left"
+                    display="block"
+                    mr={2}
+                  >
+                    Name
+                  </Text>
+                  <Field name="name">
+                    {({ field }) => <Input placeholder="Project Name" {...field} />}
+                  </Field>
+                </FormControl>
+                <FormControl mt={4}>
+                  <Text
+                    as="label"
+                    textStyle="formLabel"
+                    color="gray.600"
+                    textAlign="left"
+                    display="block"
+                    mr={2}
+                  >
+                    Description
+                  </Text>
+                  <Field name="description">
+                    {({ field }) => <Input placeholder="Description" {...field} />}
+                  </Field>
+                </FormControl>
+                <FormControl mt={4}>
+                  <Text
+                    as="label"
+                    textStyle="formLabel"
+                    color="gray.600"
+                    textAlign="left"
+                    display="block"
+                    mr={2}
+                  >
+                    Image URL
+                  </Text>
+                  <Field name="url">
+                    {({ field }) => <Input placeholder="http://example.com/image" {...field} />}
+                  </Field>
+                </FormControl>
+              </Form>
+            </Box>
+          </ModalBody>
+        </ModalContent>
+      </Modal>
     </Layout>
   )
 }

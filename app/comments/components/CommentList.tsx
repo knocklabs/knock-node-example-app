@@ -52,15 +52,17 @@ const CommentList = ({ asset, project, slug, refetch }) => {
   }
 
   useEffect(() => {
-    const comment = asset.comments[asset.comments.length - 1]
-    const paneElement: HTMLDivElement | null = paneRef?.current
+    if (asset.comments.length) {
+      const comment = asset.comments[asset.comments.length - 1]
+      const paneElement: HTMLDivElement | null = paneRef?.current
 
-    if (paneElement) {
-      const item = paneElement.querySelector(`[data-id='${comment.id}']`)
+      if (paneElement) {
+        const item = paneElement.querySelector(`[data-id='${comment.id}']`)
 
-      if (item) item.scrollIntoView()
+        if (item) item.scrollIntoView()
+      }
     }
-  }, [asset])
+  }, [asset.comments])
 
   return (
     <>

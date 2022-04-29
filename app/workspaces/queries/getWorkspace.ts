@@ -8,7 +8,22 @@ const GetWorkspace = z.object({
 })
 
 export default resolver.pipe(resolver.zod(GetWorkspace), resolver.authorize(), async ({ slug }) => {
-  const workspace = await db.workspace.findFirst({ where: { slug }, include: { projects: true } })
+  const workspace = await db.workspace.findFirst({
+    where: {
+      slug,
+    },
+    include: {
+      projects: {
+        include: {
+          members: {
+            include: {
+              user: true,
+            },
+          },
+        },
+      },
+    },
+  })
 
   if (!workspace) throw new NotFoundError()
 
