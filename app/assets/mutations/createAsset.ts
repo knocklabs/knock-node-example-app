@@ -26,7 +26,7 @@ export default resolver.pipe(
       data: {
         author: {
           connect: {
-            id: session.userId,
+            id: session.userId!,
           },
         },
         ...input,

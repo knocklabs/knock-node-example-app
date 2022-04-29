@@ -13,14 +13,10 @@ const WorkspacePageComponent = () => {
   const slug = useParam("slug", "string")
   const [workspace] = useQuery(getWorkspace, { slug })
 
-  useEffect(() => {
-    if (workspace) {
-      // const project = workspace.projects[0]
-      // router.push(`${slug}/${project?.id}`)
-    } else {
-      router.push("/")
-    }
-  }, [workspace, router])
+  if (!workspace || !slug) {
+    router.push("/")
+    return <Spinner />
+  }
 
   return (
     <Layout>
@@ -44,10 +40,14 @@ const WorkspacePageComponent = () => {
                   borderRadius="md"
                 >
                   <Heading size="md">{project.name}</Heading>
-                  <Text>{project.description}</Text>
                   <Box mt={6}>
                     {project.members.map((member) => (
-                      <Avatar key={member.id} name={member.user.name} size="sm" mr={2} />
+                      <Avatar
+                        key={member.id}
+                        name={member.user.name || "Unknown"}
+                        size="sm"
+                        mr={2}
+                      />
                     ))}
                   </Box>
                 </Flex>
