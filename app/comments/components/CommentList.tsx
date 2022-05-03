@@ -24,26 +24,9 @@ const CommentList = ({ asset, project, slug, refetch }) => {
 
     const attrs = {
       text: commentText,
-      asset: {
-        connect: {
-          id: asset.id,
-        },
-      },
-      author: {
-        connect: {
-          id: user?.id!,
-        },
-      },
-      project: {
-        connect: {
-          id: project.id,
-        },
-      },
-      workspace: {
-        connect: {
-          slug,
-        },
-      },
+      assetId: asset.id,
+      projectId: project.id,
+      workspaceSlug: slug,
     }
 
     createCommentMutation(attrs)

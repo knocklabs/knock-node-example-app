@@ -4,12 +4,7 @@ import { Signup } from "app/auth/validations"
 import { Role } from "types"
 import { Knock } from "@knocklabs/node"
 
-const knockClient = new Knock(process.env.KNOCK_API_KEY, { host: process.env.KNOCK_HOST })
-
-type IdentifyPayload = {
-  email: string
-  name?: string
-}
+const knockClient = new Knock(process.env.KNOCK_API_KEY)
 
 export default resolver.pipe(resolver.zod(Signup), async ({ email, password, name }, ctx) => {
   const hashedPassword = await SecurePassword.hash(password.trim())
@@ -37,8 +32,10 @@ export default resolver.pipe(resolver.zod(Signup), async ({ email, password, nam
       })
     }
 
+    // Identify user on Knock so we the data is accesible when triggering workflows
     await knockClient.users.identify(`${user.id}`, { email: user.email, name: user.name })
 
+    // Trigger the welcome email workflow
     await knockClient.notify("welcome", {
       data: {
         workspace: workspace?.name || "Default",
