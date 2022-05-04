@@ -1,7 +1,6 @@
 import { useEffect, Suspense } from "react"
 import { BlitzPage, useMutation, usePaginatedQuery } from "blitz"
 import { useRouter, Routes } from "blitz"
-import Layout from "app/core/layouts/Layout"
 import { useCurrentUser } from "app/core/hooks/useCurrentUser"
 import getWorkspaces from "app/workspaces/queries/getWorkspaces"
 
@@ -39,6 +38,5 @@ const Home: BlitzPage = () => {
 }
 
 Home.suppressFirstRenderFlicker = true
-Home.getLayout = (page) => <Layout title="Home">{page}</Layout>
 
 export default Home
