@@ -2,6 +2,7 @@ import { BlitzPage, useRouter, useParam, useQuery, useMutation, Link, Routes } f
 import { useEffect, useState, useRef, Suspense } from "react"
 
 import Layout from "app/core/components/Layout"
+import AddSlackBtn from "app/projects/components/AddSlackBtn"
 import getProject from "app/projects/queries/getProject"
 import createAsset from "app/assets/mutations/createAsset"
 import { Form } from "app/core/components/Form"
@@ -48,12 +49,19 @@ const ProjectPageComponent = () => {
       <>
         <Flex flex={1} height="100%">
           <Box p={6} width="100%" position="relative">
-            <Heading size="lg" mb={6}>
-              {project.name}
+            <Flex alignItems="center" mb={6}>
+              <Heading size="lg">{project.name}</Heading>
               <Button ml={4} onClick={onOpen}>
                 Create asset
               </Button>
-            </Heading>
+              {project.slackChannel ? (
+                <Text ml="auto" fontWeight="bold">
+                  Connected to: {project.slackChannel}
+                </Text>
+              ) : (
+                <AddSlackBtn projectId={project.id} />
+              )}
+            </Flex>
 
             <Flex>
               {project.assets?.map((asset) => (

@@ -2,7 +2,7 @@ import { resolver, Ctx } from "blitz"
 import db from "db"
 import { z } from "zod"
 
-import { Knock } from "@knocklabs/node"
+import { Knock, Recipient } from "@knocklabs/node"
 
 const knockClient = new Knock(process.env.KNOCK_API_KEY)
 
@@ -72,13 +72,17 @@ export default resolver.pipe(
       })
 
       // Get all project members from the project except for the author of the comment
-      const recipients = project.members
+      const recipients: Recipient[] = project.members
         .filter((m) => m.userId !== userId)
         .map((m) => `${m.userId}`)
+
+      // Add the project as a recipient for the case we are sending Slack notifications
+      recipients.push({ id: `${project.id}`, collection: "projects" })
 
       // Notify recipients on Knock. This should be done asynchronously
       // (for example using background jobs, or other similar pattern)
       await knockClient.notify("new-comment", {
+        actor: `${userId}`,
         recipients,
         data: {
           comment_content: comment.text,

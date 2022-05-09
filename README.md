@@ -47,6 +47,12 @@ KNOCK_API_KEY=<Knock server api key>
 # Required for Knock's notification React feed component to render correctly
 BLITZ_PUBLIC_KNOCK_CLIENT_ID=<Knock client key>
 BLITZ_PUBLIC_KNOCK_FEED_ID=<Knock in app feed channel id>
+
+# For Slack notifications
+BLITZ_PUBLIC_SLACK_CLIENT_ID=<Slack client id>
+SLACK_CLIENT_SECRET=<Slack app client secrent>
+BLITZ_PUBLIC_SLACK_REDIRECT_URI=<Slack redirect URI>
+KNOCK_SLACK_CHANNEL_ID=<id of a Slack channel in Knock>
 ```
 
 Ensure the `.env.test.local` file has required environment variables:
@@ -54,6 +60,12 @@ Ensure the `.env.test.local` file has required environment variables:
 ```
 DATABASE_URL=postgresql://<YOUR_DB_USERNAME>@localhost:5432/example-collaboration-app_test
 ```
+
+## Slack notifications
+
+In order for Slack notifications to work, you will need to expose an endpoint that Slack can access
+as part of the OAuth workflow. An easy way of doing this is installing [ngrok](https://ngrok.com/) and creating a public tunnel
+to your local web server.
 
 ## Commands
 
