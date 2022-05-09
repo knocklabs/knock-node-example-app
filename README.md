@@ -40,6 +40,13 @@ Ensure the `.env.local` file has required environment variables:
 
 ```
 DATABASE_URL=postgresql://<YOUR_DB_USERNAME>@localhost:5432/example-collaboration-app
+
+# Required for triggering Knock workflows
+KNOCK_API_KEY=<Knock server api key>
+
+# Required for Knock's notification React feed component to render correctly
+BLITZ_PUBLIC_KNOCK_CLIENT_ID=<Knock client key>
+BLITZ_PUBLIC_KNOCK_FEED_ID=<Knock in app feed channel id>
 ```
 
 Ensure the `.env.test.local` file has required environment variables:

@@ -25,6 +25,7 @@
   },
   "dependencies": {
     "@knocklabs/node": "0.4.3",
+    "@knocklabs/react-notification-feed": "0.5.9",
     "@chakra-ui/react": "1.8.8",
     "@emotion/react": "^11",
     "@emotion/styled": "^11",
