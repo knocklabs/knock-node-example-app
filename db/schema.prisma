@@ -92,15 +92,16 @@ model Workspace_seat {
 }
 
 model Project {
-  id          Int              @id @default(autoincrement())
-  createdAt   DateTime         @default(now())
-  updatedAt   DateTime         @updatedAt
-  name        String
-  workspace   Workspace        @relation(fields: [workspaceId], references: [id])
-  workspaceId Int
-  members     Project_member[]
-  assets      Asset[]
-  comments    Comment[]
+  id           Int              @id @default(autoincrement())
+  createdAt    DateTime         @default(now())
+  updatedAt    DateTime         @updatedAt
+  name         String
+  workspace    Workspace        @relation(fields: [workspaceId], references: [id])
+  workspaceId  Int
+  slackChannel String?
+  members      Project_member[]
+  assets       Asset[]
+  comments     Comment[]
 }
 
 model Project_member {
