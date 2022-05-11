@@ -17,6 +17,10 @@ export default resolver.pipe(
     const userId = session.userId
     const projectId = input.projectId
 
+    if (!userId) {
+      return new AuthenticationError()
+    }
+
     const userProjectMember = await db.project_member.findFirst({
       where: {
         userId,
@@ -24,32 +28,36 @@ export default resolver.pipe(
       },
     })
 
-    await db.project_member.update({
-      where: {
-        id: userProjectMember.id,
-      },
-      data: {
-        muted: !userProjectMember.muted,
-      },
-    })
+    if (userProjectMember) {
+      await db.project_member.update({
+        where: {
+          id: userProjectMember.id,
+        },
+        data: {
+          muted: !userProjectMember.muted,
+        },
+      })
 
-    const user = await db.user.findFirst({
-      where: { id: userId },
-      include: {
-        projectMemberships: true,
-      },
-    })
+      const user = await db.user.findFirst({
+        where: { id: userId },
+        include: {
+          projectMemberships: true,
+        },
+      })
 
-    // get all project memberships that are muted
-    const mutedProjectIds = user.projectMemberships
-      .filter((pm) => pm.muted)
-      .map((pm) => pm.projectId)
+      if (user) {
+        // get all project memberships that are muted
+        const mutedProjectIds = user.projectMemberships
+          .filter((pm) => pm.muted)
+          .map((pm) => pm.projectId)
 
-    // store the muted projects as a variable within Knock's user
-    await knockClient.users.identify(`${userId}`, {
-      muted_projects: mutedProjectIds,
-    })
+        // store the muted projects as a variable within Knock's user
+        await knockClient.users.identify(`${userId}`, {
+          muted_projects: mutedProjectIds,
+        })
+      }
 
-    return {}
+      return {}
+    }
   }
 )

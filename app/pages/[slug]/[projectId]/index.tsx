@@ -44,7 +44,7 @@ const ProjectPageComponent = () => {
   })
   const [toggleMutedMutation] = useMutation(toggleMuted)
 
-  if (!slug || !project) {
+  if (!slug || !project || !user) {
     router.push("/")
     return <Spinner />
   }
@@ -118,7 +118,7 @@ const ProjectPageComponent = () => {
                   size="lg"
                   isChecked={userProjectMembership?.muted}
                   onChange={async () => {
-                    await toggleMuted({ projectId: project.id })
+                    await toggleMutedMutation({ projectId: project.id })
                     await refetch()
                   }}
                 />
