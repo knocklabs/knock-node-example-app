@@ -29,13 +29,14 @@ export default resolver.pipe(
         // Sync user data on Knock
         await knockClient.users.identify(`${userId}`, { name: input.name })
 
-        // Set preferences for the channel type
+        // First we need to get the user preferences from Knock
         const preferences = await knockClient.users.getPreferences(`${userId}`)
         const updatedPreferences = {
           ...preferences,
           channel_types: { email: input.emailNotifications },
         }
 
+        // Sync preferences with the updated email preferences
         await knockClient.users.setPreferences(`${userId}`, updatedPreferences)
       }
     }
