@@ -33,7 +33,7 @@ const ProjectPageComponent = () => {
   const slug = useParam("slug", "string")
   const id = useParam("projectId", "number")
   const [project, { refetch }] = useQuery(getProject, { id })
-  const user = useCurrentUser()
+  const { user } = useCurrentUser()
 
   const { isOpen, onOpen, onClose } = useDisclosure()
 

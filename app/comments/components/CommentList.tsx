@@ -11,7 +11,7 @@ import createComment from "app/comments/mutations/createComment"
 const CommentList = ({ asset, project, slug, refetch }) => {
   const paneRef = useRef<HTMLDivElement>(null)
   const [commentText, setCommentText] = useState("")
-  const user = useCurrentUser()
+  const { user } = useCurrentUser()
 
   const [createCommentMutation] = useMutation(createComment, {
     onSuccess: () => {

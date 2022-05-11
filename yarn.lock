@@ -1592,10 +1592,10 @@
     phoenix "1.5.8"
     zustand "^3.5.10"
 
-"@knocklabs/node@0.4.4":
-  version "0.4.4"
-  resolved "https://registry.yarnpkg.com/@knocklabs/node/-/node-0.4.4.tgz#4fb481b7926d753713f580e364cfb157f369c1c0"
-  integrity sha512-T47BxKvrPZig3FXED/2zEfvwPl3brrntCvLqgupNfKhNAyzHcqNUAer3JCgaqqypdS1kzk9K8xXqETLYLc6KEw==
+"@knocklabs/node@0.4.5":
+  version "0.4.5"
+  resolved "https://registry.yarnpkg.com/@knocklabs/node/-/node-0.4.5.tgz#8510675e4e1c82c0d023c6ca5c5d6b4d4291911a"
+  integrity sha512-iGEx5XLq2DZpvOb+Og2SYeG8gUHjr0WCVfqVStD6Iqf8oyNAyE10B75GT4UnvP7iF5HVBL/xS/AFzBw6K+D2CQ==
   dependencies:
     axios "^0.21.1"
 

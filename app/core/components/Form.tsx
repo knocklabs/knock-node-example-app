@@ -31,7 +31,6 @@ export function Form<S extends z.ZodType<any, any>>({
   ...props
 }: FormProps<S>) {
   const [formError, setFormError] = useState<string | null>(null)
-  console.log(validateZodSchema(schema))
   return (
     <Formik
       initialValues={initialValues || {}}

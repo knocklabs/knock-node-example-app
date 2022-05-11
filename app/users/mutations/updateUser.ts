@@ -1,0 +1,43 @@
+import { resolver, Ctx } from "blitz"
+import db from "db"
+import { z } from "zod"
+
+import { Knock, Recipient } from "@knocklabs/node"
+
+const knockClient = new Knock(process.env.KNOCK_API_KEY)
+
+const UpdateUser = z.object({
+  name: z.string(),
+  emailNotifications: z.boolean(),
+})
+
+export default resolver.pipe(
+  resolver.zod(UpdateUser),
+  resolver.authorize(),
+  async (input, { session }: Ctx) => {
+    const userId = session.userId
+
+    if (userId) {
+      const updated = await db.user.update({
+        where: {
+          id: userId,
+        },
+        data: input,
+      })
+
+      if (updated) {
+        // Sync user data on Knock
+        await knockClient.users.identify(`${userId}`, { name: input.name })
+
+        // Set preferences for the channel type
+        const preferences = await knockClient.users.getPreferences(`${userId}`)
+        const updatedPreferences = {
+          ...preferences,
+          channel_types: { email: input.emailNotifications },
+        }
+
+        await knockClient.users.setPreferences(`${userId}`, updatedPreferences)
+      }
+    }
+  }
+)

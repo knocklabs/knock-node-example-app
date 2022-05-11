@@ -3,7 +3,9 @@ import { SecurePassword } from "blitz"
 
 import { Knock } from "@knocklabs/node"
 
-const knockClient = new Knock(process.env.KNOCK_API_KEY)
+const knockClient = new Knock(process.env.KNOCK_API_KEY, {
+  host: process.env.BLITZ_PUBLIC_KNOCK_HOST,
+})
 
 const seed = async () => {
   const hashedPassword = await SecurePassword.hash("password")
