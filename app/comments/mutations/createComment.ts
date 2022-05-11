@@ -89,6 +89,7 @@ export default resolver.pipe(
           asset_name: asset.name,
           asset_url: asset.url,
           project_name: project.name,
+          projectId: project.id,
         },
       })
 

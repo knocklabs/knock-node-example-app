@@ -4,12 +4,15 @@ import { useEffect, useState, useRef, Suspense } from "react"
 import Layout from "app/core/components/Layout"
 import AddSlackBtn from "app/projects/components/AddSlackBtn"
 import getProject from "app/projects/queries/getProject"
+import toggleMuted from "app/projects/mutations/toggleMuted"
 import createAsset from "app/assets/mutations/createAsset"
 import { Form } from "app/core/components/Form"
+import { useCurrentUser } from "app/core/hooks/useCurrentUser"
 
 import { Avatar } from "@chakra-ui/avatar"
 import { AspectRatio, Box, Flex, Heading, ListItem, Text, UnorderedList } from "@chakra-ui/layout"
 import {
+  Switch,
   Image,
   Spinner,
   Button,
@@ -30,6 +33,7 @@ const ProjectPageComponent = () => {
   const slug = useParam("slug", "string")
   const id = useParam("projectId", "number")
   const [project, { refetch }] = useQuery(getProject, { id })
+  const user = useCurrentUser()
 
   const { isOpen, onOpen, onClose } = useDisclosure()
 
@@ -38,11 +42,14 @@ const ProjectPageComponent = () => {
       refetch()
     },
   })
+  const [toggleMutedMutation] = useMutation(toggleMuted)
 
   if (!slug || !project) {
     router.push("/")
     return <Spinner />
   }
+
+  const userProjectMembership = project.members.find((m) => m.userId === user.id)
 
   return (
     <Layout>
@@ -101,6 +108,23 @@ const ProjectPageComponent = () => {
             position="relative"
             height="100%"
           >
+            <Box p={4}>
+              <Heading size="xs" mb={4}>
+                Preferences
+              </Heading>
+              <Flex>
+                <Switch
+                  id="email-alerts"
+                  size="lg"
+                  isChecked={userProjectMembership?.muted}
+                  onChange={async () => {
+                    await toggleMuted({ projectId: project.id })
+                    await refetch()
+                  }}
+                />
+                <Text ml={3}>Muted</Text>
+              </Flex>
+            </Box>
             <Box borderBottomColor="gray.200" borderBottomWidth={1} p={4}>
               <Heading size="xs" fontWeight="regular" mt={3} mb={4}>
                 {project.members?.length} Project members
