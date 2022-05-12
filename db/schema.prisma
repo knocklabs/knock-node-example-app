@@ -13,20 +13,20 @@ generator client {
 // --------------------------------------
 
 model User {
-  id                 Int              @id @default(autoincrement())
-  createdAt          DateTime         @default(now())
-  updatedAt          DateTime         @updatedAt
-  name               String
-  email              String           @unique
-  hashedPassword     String?
-  role               String           @default("USER")
-  emailNotifications Boolean          @default(false)
-  tokens             Token[]
-  sessions           Session[]
-  Workspace_seat     Workspace_seat[]
-  projectMemberships Project_member[]
-  Asset              Asset[]
-  Comment            Comment[]
+  id                      Int              @id @default(autoincrement())
+  createdAt               DateTime         @default(now())
+  updatedAt               DateTime         @updatedAt
+  name                    String
+  email                   String           @unique
+  hashedPassword          String?
+  role                    String           @default("USER")
+  newCommentNotifications String[]
+  tokens                  Token[]
+  sessions                Session[]
+  Workspace_seat          Workspace_seat[]
+  projectMemberships      Project_member[]
+  Asset                   Asset[]
+  Comment                 Comment[]
 }
 
 model Session {

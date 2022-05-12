@@ -8,7 +8,7 @@ const knockClient = new Knock(process.env.KNOCK_API_KEY)
 
 const UpdateUser = z.object({
   name: z.string(),
-  emailNotifications: z.boolean(),
+  newCommentNotifications: z.string().array(),
 })
 
 export default resolver.pipe(
@@ -25,20 +25,21 @@ export default resolver.pipe(
         data: input,
       })
 
-      if (updated) {
-        // Sync user data on Knock
-        await knockClient.users.identify(`${userId}`, { name: input.name })
+      // Sync user data on Knock
+      await knockClient.users.identify(`${userId}`, { name: input.name })
 
-        // First we need to get the user preferences from Knock
-        const preferences = await knockClient.users.getPreferences(`${userId}`)
-        const updatedPreferences = {
-          ...preferences,
-          channel_types: { email: input.emailNotifications },
-        }
-
-        // Sync preferences with the updated email preferences
-        await knockClient.users.setPreferences(`${userId}`, updatedPreferences)
+      // First we need to get the user preferences from Knock
+      const preferences = await knockClient.users.getPreferences(`${userId}`)
+      const updatedPreferences = {
+        ...preferences,
+        channel_types: {
+          email: input.newCommentNotifications.includes("email"),
+          in_app_feed: input.newCommentNotifications.includes("in_app_feed"),
+        },
       }
+
+      // Sync preferences with the updated email preferences
+      await knockClient.users.setPreferences(`${userId}`, updatedPreferences)
     }
   }
 )

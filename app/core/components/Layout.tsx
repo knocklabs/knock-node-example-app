@@ -4,8 +4,11 @@ import { useRouter, useMutation } from "blitz"
 
 import {
   Avatar,
+  Button,
   Checkbox,
+  CheckboxGroup,
   FormControl,
+  HStack,
   Modal,
   ModalBody,
   ModalCloseButton,
@@ -16,7 +19,7 @@ import {
   useDisclosure,
 } from "@chakra-ui/react"
 import { Input } from "@chakra-ui/input"
-import { Field } from "formik"
+import { Formik, Field } from "formik"
 
 import {
   KnockFeedProvider,
@@ -28,7 +31,6 @@ import "@knocklabs/react-notification-feed/dist/index.css"
 
 import { useCurrentUser } from "app/core/hooks/useCurrentUser"
 import updateUser from "app/users/mutations/updateUser"
-import { Form } from "app/core/components/Form"
 
 type Props = {
   children?: React.ReactElement
@@ -110,50 +112,67 @@ const Layout: React.FC<Props> = ({ children }) => {
 
           <ModalBody p={5}>
             <Box background="beige.100">
-              <Form
-                submitText="Update"
-                initialValues={{ name: user.name, emailNotifications: user.emailNotifications }}
+              <Formik
+                initialValues={{
+                  name: user.name,
+                  newCommentNotifications: user.newCommentNotifications,
+                }}
                 onSubmit={async (values) => {
                   await updateUserMutation(values)
                   refetchUser()
                   onCloseSettingsModal()
                 }}
               >
-                <FormControl>
-                  <Text
-                    as="label"
-                    textStyle="formLabel"
-                    color="gray.600"
-                    textAlign="left"
-                    display="block"
-                    mr={2}
-                  >
-                    Name
-                  </Text>
-                  <Field name="name">
-                    {({ field }) => <Input placeholder="Project Name" {...field} />}
-                  </Field>
-                </FormControl>
-                <FormControl mt={4}>
-                  <Text
-                    as="label"
-                    textStyle="formLabel"
-                    color="gray.600"
-                    textAlign="left"
-                    display="block"
-                    mr={2}
-                  >
-                    Do you want to receive emails?
-                  </Text>
-                  <Field name="emailNotifications">
-                    {({ field }) => (
-                      <Checkbox isChecked={field.value} {...field}>
-                        Yes
-                      </Checkbox>
-                    )}
-                  </Field>
-                </FormControl>
-              </Form>
+                {({ handleSubmit, isSubmitting, setFieldValue }) => (
+                  <form onSubmit={handleSubmit}>
+                    <FormControl>
+                      <Text
+                        as="label"
+                        textStyle="formLabel"
+                        color="gray.600"
+                        textAlign="left"
+                        display="block"
+                        mr={2}
+                      >
+                        Name
+                      </Text>
+                      <Field name="name">
+                        {({ field }) => <Input placeholder="Project Name" {...field} />}
+                      </Field>
+                    </FormControl>
+                    <FormControl mt={4} as="fieldset">
+                      <Text
+                        as="label"
+                        textStyle="formLabel"
+                        color="gray.600"
+                        textAlign="left"
+                        display="block"
+                        mr={2}
+                      >
+                        New comment notifications
+                      </Text>
+                      <Field name="newCommentNotifications">
+                        {({ field }) => (
+                          <CheckboxGroup
+                            {...field}
+                            onChange={(notifications) => {
+                              setFieldValue("newCommentNotifications", notifications)
+                            }}
+                          >
+                            <HStack spacing="24px">
+                              <Checkbox value="email">Email</Checkbox>
+                              <Checkbox value="in_app_feed">In-app feed</Checkbox>
+                            </HStack>
+                          </CheckboxGroup>
+                        )}
+                      </Field>
+                    </FormControl>
+                    <Button type="submit" disabled={isSubmitting} mt={8}>
+                      Update
+                    </Button>
+                  </form>
+                )}
+              </Formik>
             </Box>
           </ModalBody>
         </ModalContent>

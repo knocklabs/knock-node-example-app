@@ -1,4 +1,4 @@
-import { resolver, Ctx } from "blitz"
+import { resolver, Ctx, AuthenticationError } from "blitz"
 import db from "db"
 import { z } from "zod"
 
