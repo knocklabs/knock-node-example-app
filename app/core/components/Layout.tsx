@@ -1,25 +1,9 @@
 import { useRef } from "react"
 import { Box, Flex, Text } from "@chakra-ui/layout"
-import { useRouter, useMutation } from "blitz"
+import { useRouter } from "blitz"
 
-import {
-  Avatar,
-  Button,
-  Checkbox,
-  CheckboxGroup,
-  FormControl,
-  HStack,
-  Modal,
-  ModalBody,
-  ModalCloseButton,
-  ModalContent,
-  ModalHeader,
-  ModalOverlay,
-  Link,
-  useDisclosure,
-} from "@chakra-ui/react"
+import { Avatar, useDisclosure } from "@chakra-ui/react"
 import { Input } from "@chakra-ui/input"
-import { Formik, Field } from "formik"
 
 import {
   KnockFeedProvider,
@@ -30,7 +14,7 @@ import {
 import "@knocklabs/react-notification-feed/dist/index.css"
 
 import { useCurrentUser } from "app/core/hooks/useCurrentUser"
-import updateUser from "app/users/mutations/updateUser"
+import NotificationPreferencesModal from "app/users/components/NotificationPreferencesModal"
 
 type Props = {
   children?: React.ReactElement
@@ -46,7 +30,6 @@ const Layout: React.FC<Props> = ({ children }) => {
     onOpen: onOpenSettingsModal,
     onClose: onCloseSettingsModal,
   } = useDisclosure()
-  const [updateUserMutation] = useMutation(updateUser)
 
   const notifButtonRef = useRef(null)
 
@@ -102,81 +85,11 @@ const Layout: React.FC<Props> = ({ children }) => {
           {children}
         </Box>
       </Flex>
-      <Modal isOpen={isSettingsModalOpen} onClose={onCloseSettingsModal}>
-        <ModalOverlay />
-        <ModalContent overflow="hidden">
-          <ModalHeader p={5} bg="red.200" borderColor="black" borderBottomWidth={1}>
-            Update settings
-          </ModalHeader>
-          <ModalCloseButton />
-
-          <ModalBody p={5}>
-            <Box background="beige.100">
-              <Formik
-                initialValues={{
-                  name: user.name,
-                  newCommentNotifications: user.newCommentNotifications,
-                }}
-                onSubmit={async (values) => {
-                  await updateUserMutation(values)
-                  refetchUser()
-                  onCloseSettingsModal()
-                }}
-              >
-                {({ handleSubmit, isSubmitting, setFieldValue }) => (
-                  <form onSubmit={handleSubmit}>
-                    <FormControl>
-                      <Text
-                        as="label"
-                        textStyle="formLabel"
-                        color="gray.600"
-                        textAlign="left"
-                        display="block"
-                        mr={2}
-                      >
-                        Name
-                      </Text>
-                      <Field name="name">
-                        {({ field }) => <Input placeholder="Project Name" {...field} />}
-                      </Field>
-                    </FormControl>
-                    <FormControl mt={4} as="fieldset">
-                      <Text
-                        as="label"
-                        textStyle="formLabel"
-                        color="gray.600"
-                        textAlign="left"
-                        display="block"
-                        mr={2}
-                      >
-                        New comment notifications
-                      </Text>
-                      <Field name="newCommentNotifications">
-                        {({ field }) => (
-                          <CheckboxGroup
-                            {...field}
-                            onChange={(notifications) => {
-                              setFieldValue("newCommentNotifications", notifications)
-                            }}
-                          >
-                            <HStack spacing="24px">
-                              <Checkbox value="email">Email</Checkbox>
-                              <Checkbox value="in_app_feed">In-app feed</Checkbox>
-                            </HStack>
-                          </CheckboxGroup>
-                        )}
-                      </Field>
-                    </FormControl>
-                    <Button type="submit" disabled={isSubmitting} mt={8}>
-                      Update
-                    </Button>
-                  </form>
-                )}
-              </Formik>
-            </Box>
-          </ModalBody>
-        </ModalContent>
-      </Modal>
+      <NotificationPreferencesModal
+        user={user}
+        isOpen={isSettingsModalOpen}
+        onClose={onCloseSettingsModal}
+      />
     </>
   )
 }
