@@ -103,7 +103,7 @@ const NotificationPreferencesModal = ({ user, isOpen, onClose }) => {
                       textStyle="formLabel"
                       fontWeight="500"
                       color="gray.900"
-                      size="14px"
+                      fontSize="14px"
                       justifySelf="center"
                     >
                       In-app
@@ -112,7 +112,7 @@ const NotificationPreferencesModal = ({ user, isOpen, onClose }) => {
                       textStyle="formLabel"
                       fontWeight="500"
                       color="gray.900"
-                      size="14px"
+                      fontSize="14px"
                       justifySelf="center"
                     >
                       Email
@@ -125,7 +125,7 @@ const NotificationPreferencesModal = ({ user, isOpen, onClose }) => {
                               textStyle="formLabel"
                               fontWeight="500"
                               color="gray.900"
-                              size="14px"
+                              fontSize="14px"
                             >
                               {workflowKeyToName[workflowKey] || workflowKey}
                             </Text>
@@ -162,6 +162,7 @@ const NotificationPreferencesModal = ({ user, isOpen, onClose }) => {
                       color="gray.700"
                       fontWeight="500"
                       borderColor="#DDDEE1"
+                      onClick={onClose}
                     >
                       Cancel
                     </Button>
