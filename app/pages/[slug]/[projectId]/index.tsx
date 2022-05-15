@@ -55,7 +55,7 @@ const ProjectPageComponent = () => {
     <Layout>
       <>
         <Flex flex={1} height="100%">
-          <Box p={6} width="100%" position="relative">
+          <Box p={6} width="calc(100% - 390px)" position="relative">
             <Flex alignItems="center" mb={6}>
               <Heading size="lg">{project.name}</Heading>
               <Button ml={4} onClick={onOpen}>
@@ -158,16 +158,8 @@ const ProjectPageComponent = () => {
                   initialValues={{ name: "", description: "", url: "" }}
                   onSubmit={async (values) => {
                     await createAssetMutation({
-                      workspace: {
-                        connect: {
-                          slug: slug,
-                        },
-                      },
-                      project: {
-                        connect: {
-                          id: project.id,
-                        },
-                      },
+                      workspaceSlug: slug,
+                      projectId: project.id,
                       ...values,
                     })
                     onClose()

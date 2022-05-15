@@ -23,6 +23,7 @@ import Knock, { PreferenceSet } from "@knocklabs/client"
 
 const workflowKeyToName = {
   "new-comment": "New comments",
+  "new-asset": "New assets",
 }
 
 const NotificationPreferencesModal = ({ user, isOpen, onClose }) => {
@@ -53,6 +54,17 @@ const NotificationPreferencesModal = ({ user, isOpen, onClose }) => {
     return <Spinner />
   }
 
+  const preparedPreferencesWorkflows = {
+    "new-comment": {
+      channel_types: { email: true, in_app_feed: true },
+    },
+    "new-asset": {
+      channel_types: { email: true, in_app_feed: true },
+    },
+
+    ...preferences.workflows,
+  }
+
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
       <ModalOverlay />
@@ -75,13 +87,7 @@ const NotificationPreferencesModal = ({ user, isOpen, onClose }) => {
         <ModalBody p={5}>
           <Box background="beige.100">
             <Formik
-              initialValues={
-                preferences.workflows || {
-                  "new-comment": {
-                    channel_types: { email: true, in_app_feed: true },
-                  },
-                }
-              }
+              initialValues={preparedPreferencesWorkflows}
               onSubmit={async (values) => {
                 let updatedPreferences = { ...preferences, workflows: values }
                 updatedPreferences = await knockClient.preferences.set(updatedPreferences)
@@ -111,7 +117,7 @@ const NotificationPreferencesModal = ({ user, isOpen, onClose }) => {
                     >
                       Email
                     </Text>
-                    {Object.keys(preferences.workflows).map((workflowKey) => (
+                    {Object.keys(preparedPreferencesWorkflows).map((workflowKey) => (
                       <Field key="workflowKey" name={workflowKey}>
                         {({ field }) => (
                           <>
@@ -121,7 +127,7 @@ const NotificationPreferencesModal = ({ user, isOpen, onClose }) => {
                               color="gray.900"
                               size="14px"
                             >
-                              {workflowKeyToName[workflowKey]}
+                              {workflowKeyToName[workflowKey] || workflowKey}
                             </Text>
                             <Checkbox
                               isChecked={field.value?.channel_types?.in_app_feed}
@@ -133,7 +139,6 @@ const NotificationPreferencesModal = ({ user, isOpen, onClose }) => {
                                 )
                               }}
                             />
-                            {console.log(field)}
                             <Checkbox
                               isChecked={field.value?.channel_types?.email}
                               justifySelf="center"
