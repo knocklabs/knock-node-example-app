@@ -118,7 +118,7 @@ const NotificationPreferencesModal = ({ user, isOpen, onClose }) => {
                       Email
                     </Text>
                     {Object.keys(preparedPreferencesWorkflows).map((workflowKey) => (
-                      <Field key="workflowKey" name={workflowKey}>
+                      <Field key={workflowKey} name={workflowKey}>
                         {({ field }) => (
                           <>
                             <Text
