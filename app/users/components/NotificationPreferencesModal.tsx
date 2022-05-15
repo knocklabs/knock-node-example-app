@@ -57,11 +57,11 @@ const NotificationPreferencesModal = ({ user, isOpen, onClose }) => {
   const preparedPreferencesWorkflows: WorkflowPreferences = {
     "new-comment": {
       channel_types: { email: true, in_app_feed: true },
-      ...preferences.workflows["new-comment"],
+      ...(preferences.workflows["new-comment"] as object),
     },
     "new-asset": {
       channel_types: { email: true, in_app_feed: true },
-      ...preferences.workflows["new-asset"],
+      ...(preferences.workflows["new-asset"] as object),
     },
   }
 
