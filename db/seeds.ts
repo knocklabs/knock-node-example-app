@@ -106,7 +106,16 @@ const seed = async () => {
     users.map((u) => `${u.id}`),
     {
       workflows: {
-        "new-comment-example-app": {
+        "new-comment": {
+          conditions: [
+            {
+              variable: "recipient.muted_projects",
+              operator: "not_contains",
+              argument: "data.projectId",
+            },
+          ],
+        },
+        "new-asset": {
           conditions: [
             {
               variable: "recipient.muted_projects",

@@ -42,6 +42,28 @@ export default resolver.pipe(resolver.zod(Signup), async ({ email, password, nam
       },
       recipients: [`${user.id}`],
     })
+
+    await knockClient.users.setWorkflowsPreferences(`${user.id}`, {
+      "new-comment": {
+        conditions: [
+          {
+            variable: "recipient.muted_projects",
+            operator: "not_contains",
+            argument: "data.projectId",
+          },
+        ],
+      },
+      "new-asset": {
+        conditions: [
+          {
+            variable: "recipient.muted_projects",
+            operator: "not_contains",
+            argument: "data.projectId",
+          },
+        ],
+      },
+    })
+
     await ctx.session.$create({ userId: user.id, role: user.role as Role })
 
     return user
