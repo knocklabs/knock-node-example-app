@@ -52,6 +52,8 @@ export default resolver.pipe(
         author: true,
         project: {
           select: {
+            id: true,
+            name: true,
             members: true,
           },
         },

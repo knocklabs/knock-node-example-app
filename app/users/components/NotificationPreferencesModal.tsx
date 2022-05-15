@@ -19,7 +19,7 @@ import {
 
 import { Formik, Field } from "formik"
 
-import Knock, { PreferenceSet } from "@knocklabs/client"
+import Knock, { PreferenceSet, WorkflowPreferences } from "@knocklabs/client"
 
 const workflowKeyToName = {
   "new-comment": "New comments",
@@ -54,7 +54,7 @@ const NotificationPreferencesModal = ({ user, isOpen, onClose }) => {
     return <Spinner />
   }
 
-  const preparedPreferencesWorkflows = {
+  const preparedPreferencesWorkflows: WorkflowPreferences = {
     "new-comment": {
       channel_types: { email: true, in_app_feed: true },
     },
