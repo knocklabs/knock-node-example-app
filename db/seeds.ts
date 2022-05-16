@@ -1,6 +1,10 @@
 import db from "./index"
 import { SecurePassword } from "blitz"
 
+import { Knock } from "@knocklabs/node"
+
+const knockClient = new Knock(process.env.KNOCK_API_KEY)
+
 const seed = async () => {
   const hashedPassword = await SecurePassword.hash("password")
 
@@ -71,9 +75,55 @@ const seed = async () => {
           workspaceId: ingen.id,
           projectId: jurassicPark.id,
           userId: u.id,
+          muted: false,
         },
       })
     })
+  )
+
+  // If you ever need to identify all your users on Knock, you can use the bulkIdentify api
+  await knockClient.users.bulkIdentify(
+    users.map((u) => {
+      return {
+        id: `${u.id}`,
+        name: u.name,
+        email: u.email,
+        muted_projects: [],
+      }
+    })
+  )
+
+  // In order to allow users to mute notifications for certain projects, we have to
+  // store a condition on their preferences. In this case, we weill keep a list of muted
+  // channels on the "muted_projects" property of the user's object on Knock.
+
+  // Later, when a trigger call happens, we will send a projectId param that identifies on which
+  // project the comment happened.
+
+  await knockClient.users.bulkSetPreferences(
+    users.map((u) => `${u.id}`),
+    {
+      workflows: {
+        "new-comment": {
+          conditions: [
+            {
+              variable: "recipient.muted_projects",
+              operator: "not_contains",
+              argument: "data.projectId",
+            },
+          ],
+        },
+        "new-asset": {
+          conditions: [
+            {
+              variable: "recipient.muted_projects",
+              operator: "not_contains",
+              argument: "data.projectId",
+            },
+          ],
+        },
+      },
+    }
   )
 
   const trexAsset = await db.asset.create({

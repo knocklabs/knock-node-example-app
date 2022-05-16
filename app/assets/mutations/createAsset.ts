@@ -1,40 +1,83 @@
-import { resolver, Ctx } from "blitz"
+import { resolver, Ctx, AuthenticationError } from "blitz"
 import db from "db"
 import { z } from "zod"
+
+import { Knock, Recipient } from "@knocklabs/node"
+
+const knockClient = new Knock(process.env.KNOCK_API_KEY, {
+  host: process.env.BLITZ_PUBLIC_KNOCK_HOST,
+})
 
 const CreateAsset = z.object({
   name: z.string(),
   description: z.string(),
   url: z.string(),
-  project: z.object({
-    connect: z.object({
-      id: z.number(),
-    }),
-  }),
-  workspace: z.object({
-    connect: z.object({
-      slug: z.string(),
-    }),
-  }),
+  projectId: z.number(),
+  workspaceSlug: z.string(),
 })
 
 export default resolver.pipe(
   resolver.zod(CreateAsset),
   resolver.authorize(),
   async (input, { session }: Ctx) => {
+    const { name, description, url, workspaceSlug, projectId } = input
+    const userId = session.userId
+
+    if (!userId) {
+      return new AuthenticationError()
+    }
+
     const asset = await db.asset.create({
       data: {
         author: {
           connect: {
-            id: session.userId!,
+            id: userId!,
           },
         },
-        ...input,
+        workspace: {
+          connect: {
+            slug: workspaceSlug,
+          },
+        },
+        project: {
+          connect: {
+            id: projectId,
+          },
+        },
+        name,
+        description,
+        url,
       },
       include: {
         author: true,
-        project: true,
+        project: {
+          select: {
+            id: true,
+            name: true,
+            members: true,
+          },
+        },
         workspace: true,
+      },
+    })
+
+    // Get all project members from the project except for the author of the asset
+    const recipients: Recipient[] = asset.project.members
+      .filter((m) => m.userId !== userId)
+      .map((m) => `${m.userId}`)
+
+    // Add the project as a recipient for the case we are sending Slack notifications
+    recipients.push({ id: `${projectId}`, collection: "projects" })
+
+    // Notify recipients on Knock. This should be done asynchronously
+    // (for example using background jobs, or other similar pattern)
+    await knockClient.notify("new-asset", {
+      actor: `${userId}`,
+      recipients,
+      data: {
+        asset_url: asset.url,
+        project_name: asset.project.name,
+        projectId: asset.project.id,
       },
     })
 

@@ -4,12 +4,15 @@ import { useEffect, useState, useRef, Suspense } from "react"
 import Layout from "app/core/components/Layout"
 import AddSlackBtn from "app/projects/components/AddSlackBtn"
 import getProject from "app/projects/queries/getProject"
+import toggleMuted from "app/projects/mutations/toggleMuted"
 import createAsset from "app/assets/mutations/createAsset"
 import { Form } from "app/core/components/Form"
+import { useCurrentUser } from "app/core/hooks/useCurrentUser"
 
 import { Avatar } from "@chakra-ui/avatar"
 import { AspectRatio, Box, Flex, Heading, ListItem, Text, UnorderedList } from "@chakra-ui/layout"
 import {
+  Switch,
   Image,
   Spinner,
   Button,
@@ -18,6 +21,7 @@ import {
   ModalBody,
   ModalCloseButton,
   ModalContent,
+  ModalFooter,
   ModalHeader,
   ModalOverlay,
   useDisclosure,
@@ -30,6 +34,7 @@ const ProjectPageComponent = () => {
   const slug = useParam("slug", "string")
   const id = useParam("projectId", "number")
   const [project, { refetch }] = useQuery(getProject, { id })
+  const { user } = useCurrentUser()
 
   const { isOpen, onOpen, onClose } = useDisclosure()
 
@@ -38,17 +43,20 @@ const ProjectPageComponent = () => {
       refetch()
     },
   })
+  const [toggleMutedMutation] = useMutation(toggleMuted)
 
-  if (!slug || !project) {
+  if (!slug || !project || !user) {
     router.push("/")
     return <Spinner />
   }
+
+  const userProjectMembership = project.members.find((m) => m.userId === user.id)
 
   return (
     <Layout>
       <>
         <Flex flex={1} height="100%">
-          <Box p={6} width="100%" position="relative">
+          <Box p={6} width="calc(100% - 390px)" position="relative">
             <Flex alignItems="center" mb={6}>
               <Heading size="lg">{project.name}</Heading>
               <Button ml={4} onClick={onOpen}>
@@ -101,6 +109,23 @@ const ProjectPageComponent = () => {
             position="relative"
             height="100%"
           >
+            <Box p={4}>
+              <Heading size="xs" mb={4}>
+                Preferences
+              </Heading>
+              <Flex>
+                <Switch
+                  id="email-alerts"
+                  size="lg"
+                  isChecked={userProjectMembership?.muted}
+                  onChange={async () => {
+                    await toggleMutedMutation({ projectId: project.id })
+                    await refetch()
+                  }}
+                />
+                <Text ml={3}>Muted</Text>
+              </Flex>
+            </Box>
             <Box borderBottomColor="gray.200" borderBottomWidth={1} p={4}>
               <Heading size="xs" fontWeight="regular" mt={3} mb={4}>
                 {project.members?.length} Project members
@@ -122,28 +147,29 @@ const ProjectPageComponent = () => {
         <Modal isOpen={isOpen} onClose={onClose}>
           <ModalOverlay />
           <ModalContent overflow="hidden">
-            <ModalHeader p={5} bg="red.200" borderColor="black" borderBottomWidth={1}>
+            <ModalHeader
+              border="none"
+              fontSize="18px"
+              fontWeight="500"
+              p={5}
+              borderColor="black"
+              borderBottomWidth={1}
+            >
               Create asset
+              <Text fontSize="14px" fontWeight="500" pr={3}>
+                Project members will be able to comment on your asset.
+              </Text>
             </ModalHeader>
             <ModalCloseButton />
 
             <ModalBody p={5}>
               <Box background="beige.100">
                 <Form
-                  submitText="Create"
                   initialValues={{ name: "", description: "", url: "" }}
                   onSubmit={async (values) => {
                     await createAssetMutation({
-                      workspace: {
-                        connect: {
-                          slug: slug,
-                        },
-                      },
-                      project: {
-                        connect: {
-                          id: project.id,
-                        },
-                      },
+                      workspaceSlug: slug,
+                      projectId: project.id,
                       ...values,
                     })
                     onClose()
@@ -153,10 +179,9 @@ const ProjectPageComponent = () => {
                     <Text
                       as="label"
                       textStyle="formLabel"
-                      color="gray.600"
-                      textAlign="left"
-                      display="block"
-                      mr={2}
+                      fontWeight="500"
+                      color="gray.900"
+                      fontSize="14px"
                     >
                       Name
                     </Text>
@@ -168,9 +193,9 @@ const ProjectPageComponent = () => {
                     <Text
                       as="label"
                       textStyle="formLabel"
-                      color="gray.600"
-                      textAlign="left"
-                      display="block"
+                      fontWeight="500"
+                      color="gray.900"
+                      fontSize="14px"
                       mr={2}
                     >
                       Description
@@ -183,9 +208,9 @@ const ProjectPageComponent = () => {
                     <Text
                       as="label"
                       textStyle="formLabel"
-                      color="gray.600"
-                      textAlign="left"
-                      display="block"
+                      fontWeight="500"
+                      color="gray.900"
+                      fontSize="14px"
                       mr={2}
                     >
                       Image URL
@@ -194,6 +219,22 @@ const ProjectPageComponent = () => {
                       {({ field }) => <Input placeholder="http://example.com/image" {...field} />}
                     </Field>
                   </FormControl>
+                  <ModalFooter mt={8} pr={0}>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      colorScheme="white"
+                      color="gray.700"
+                      fontWeight="500"
+                      borderColor="#DDDEE1"
+                      onClick={onClose}
+                    >
+                      Cancel
+                    </Button>
+                    <Button fontWeight="500" size="sm" colorScheme="blue" type="submit" ml={2}>
+                      Save
+                    </Button>
+                  </ModalFooter>
                 </Form>
               </Box>
             </ModalBody>

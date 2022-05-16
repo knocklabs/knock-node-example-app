@@ -1,8 +1,9 @@
 import { useRef } from "react"
 import { Box, Flex, Text } from "@chakra-ui/layout"
-import { Spinner, Avatar, useDisclosure } from "@chakra-ui/react"
 import { useRouter } from "blitz"
-import { useCurrentUser } from "app/core/hooks/useCurrentUser"
+
+import { Avatar, useDisclosure } from "@chakra-ui/react"
+import { Input } from "@chakra-ui/input"
 
 import {
   KnockFeedProvider,
@@ -12,6 +13,9 @@ import {
 
 import "@knocklabs/react-notification-feed/dist/index.css"
 
+import { useCurrentUser } from "app/core/hooks/useCurrentUser"
+import NotificationPreferencesModal from "app/users/components/NotificationPreferencesModal"
+
 type Props = {
   children?: React.ReactElement
 }
@@ -19,8 +23,14 @@ type Props = {
 const Layout: React.FC<Props> = ({ children }) => {
   const router = useRouter()
   const { slug } = router.query
-  const user = useCurrentUser()
-  const { isOpen, onOpen, onClose } = useDisclosure()
+  const { user, refetchUser } = useCurrentUser()
+  const { isOpen: isFeedOpen, onOpen: onOpenFeed, onClose: onCloseFeed } = useDisclosure()
+  const {
+    isOpen: isSettingsModalOpen,
+    onOpen: onOpenSettingsModal,
+    onClose: onCloseSettingsModal,
+  } = useDisclosure()
+
   const notifButtonRef = useRef(null)
 
   if (!user) {
@@ -28,47 +38,59 @@ const Layout: React.FC<Props> = ({ children }) => {
   }
 
   return (
-    <Flex flexDirection="column" width="100vw" height="100vh">
-      <Flex
-        as="header"
-        alignItems="center"
-        backgroundColor="gray.50"
-        borderBottomColor="gray.200"
-        borderBottomWidth={1}
-        px={6}
-        py={3}
-      >
-        <Text
-          textTransform="uppercase"
-          letterSpacing={2}
-          fontSize={16}
-          color="blue.500"
-          fontWeight={600}
+    <>
+      <Flex flexDirection="column" width="100vw" height="100vh">
+        <Flex
+          as="header"
+          alignItems="center"
+          backgroundColor="gray.50"
+          borderBottomColor="gray.200"
+          borderBottomWidth={1}
+          px={6}
+          py={3}
         >
-          Collab
-        </Text>
-        <Box ml="auto">
-          <KnockFeedProvider
-            apiKey={process.env.BLITZ_PUBLIC_KNOCK_CLIENT_ID!}
-            feedId={process.env.BLITZ_PUBLIC_KNOCK_FEED_ID!}
-            userId={`${user.id}`}
+          <Text
+            textTransform="uppercase"
+            letterSpacing={2}
+            fontSize={16}
+            color="blue.500"
+            fontWeight={600}
           >
-            <Box ml="auto">
-              <NotificationIconButton ref={notifButtonRef} onClick={onOpen} />
-              <NotificationFeedPopover
-                buttonRef={notifButtonRef}
-                isVisible={isOpen}
-                onClose={onClose}
-              />
-            </Box>
-          </KnockFeedProvider>
+            Collab
+          </Text>
+          <Box ml="auto">
+            <KnockFeedProvider
+              host={process.env.BLITZ_PUBLIC_KNOCK_HOST}
+              apiKey={process.env.BLITZ_PUBLIC_KNOCK_CLIENT_ID!}
+              feedId={process.env.BLITZ_PUBLIC_KNOCK_FEED_ID!}
+              userId={`${user.id}`}
+            >
+              <Box ml="auto">
+                <NotificationIconButton ref={notifButtonRef} onClick={onOpenFeed} />
+                <NotificationFeedPopover
+                  buttonRef={notifButtonRef}
+                  isVisible={isFeedOpen}
+                  onClose={onCloseFeed}
+                />
+              </Box>
+            </KnockFeedProvider>
+          </Box>
+          {user?.name ? (
+            <Avatar cursor="pointer" size="xs" name={user.name} onClick={onOpenSettingsModal} />
+          ) : (
+            ""
+          )}
+        </Flex>
+        <Box flex={1} width="100%">
+          {children}
         </Box>
-        {user?.name ? <Avatar size="xs" name={user.name} /> : ""}
       </Flex>
-      <Box flex={1} width="100%">
-        {children}
-      </Box>
-    </Flex>
+      <NotificationPreferencesModal
+        user={user}
+        isOpen={isSettingsModalOpen}
+        onClose={onCloseSettingsModal}
+      />
+    </>
   )
 }
 
