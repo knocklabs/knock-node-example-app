@@ -1,9 +1,8 @@
 # **Knock + Node.js example app**
 
-## Introduction
+This example app uses [Knock](https://knock.app) to power cross channel notifications via email, an in-app feed, and Slack inside of a full-stack Node  application, written in [Blitz.js](https://blitzjs.com/). It uses the [Knock Node SDK](https://github.com/knocklabs/knock-node) and [React in-app feed components](https://github.com/knocklabs/react-notification-feed).
 
-This is a [Knock](https://knock.app) + [Blitz.js](https://blitzjs.com/) app.
-The goal of this example is app is to showcase how can Knock be integrated in your app.
+You can read more about this example app [in the Knock documentation](https://docs.knock.app/getting-started/example-app).
 
 ## Running locally
 
@@ -63,7 +62,3 @@ DATABASE_URL=postgresql://<YOUR_DB_USERNAME>@localhost:5432/example-collaboratio
 In order for Slack notifications to work, you will need to expose an endpoint that Slack can access
 as part of the OAuth workflow. An easy way of doing this is installing [ngrok](https://ngrok.com/) and creating a public tunnel
 to your local web server.
-
-## Documentation
-
-Learn more about Knock's features used in this example app [here](https://docs.knock.app)
