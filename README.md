@@ -1,18 +1,14 @@
-[![Blitz.js](https://raw.githubusercontent.com/blitz-js/art/master/github-cover-photo.png)](https://blitzjs.com)
+# **Knock + Node.js example app**
 
-This is a [Blitz.js](https://github.com/blitz-js/blitz) app.
+This example app uses [Knock](https://knock.app) to power cross channel notifications via email, an in-app feed, and Slack inside of a full-stack Node  application, written in [Blitz.js](https://blitzjs.com/). It uses the [Knock Node SDK](https://github.com/knocklabs/knock-node) and [React in-app feed components](https://github.com/knocklabs/react-notification-feed).
 
-# **Example collaboration app**
+You can read more about this example app [in the Knock documentation](https://docs.knock.app/getting-started/example-app).
 
-## Introduction
-
-The goal of this example is app is to showcase how can Knock be integrated in your app.
-
-## Getting Started
+## Running locally
 
 First, configure the environment variables properly.
 
-The run:
+Then run:
 
 ```
 blitz prisma migrate dev
@@ -30,7 +26,7 @@ Finally, we can start the development server by running:
 blitz dev
 ```
 
-You can take a look at the dummy users credentials on the seed file in order to log in.
+You can take a look at the seed users credentials on the seed file in order to log in.
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
@@ -66,22 +62,3 @@ DATABASE_URL=postgresql://<YOUR_DB_USERNAME>@localhost:5432/example-collaboratio
 In order for Slack notifications to work, you will need to expose an endpoint that Slack can access
 as part of the OAuth workflow. An easy way of doing this is installing [ngrok](https://ngrok.com/) and creating a public tunnel
 to your local web server.
-
-## Commands
-
-Blitz comes with a powerful CLI that is designed to make development easy and fast. You can install it with `npm i -g blitz`
-
-```
-  blitz [COMMAND]
-
-  dev       Start a development server
-  build     Create a production build
-  start     Start a production server
-  export    Export your Blitz app as a static application
-  prisma    Run prisma commands
-  generate  Generate new files for your Blitz project
-  console   Run the Blitz console REPL
-  install   Install a recipe
-  help      Display help for blitz
-  test      Run project tests
-```
