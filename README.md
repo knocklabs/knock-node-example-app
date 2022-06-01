@@ -6,7 +6,7 @@ You can read more about this example app [in the Knock documentation](https://do
 
 ## Running locally
 
-First, configure the environment variables properly.
+First, configure the environment variables properly (see the bottom of this README).
 
 Then run:
 
@@ -14,7 +14,7 @@ Then run:
 blitz prisma migrate dev
 ```
 
-Then, lets get the database populated with seed data by running:
+Then, let's get the database populated with seed data by running:
 
 ```
 blitz db seed
@@ -46,7 +46,7 @@ BLITZ_PUBLIC_KNOCK_FEED_ID=<Knock in app feed channel id>
 
 # For Slack notifications
 BLITZ_PUBLIC_SLACK_CLIENT_ID=<Slack client id>
-SLACK_CLIENT_SECRET=<Slack app client secrent>
+SLACK_CLIENT_SECRET=<Slack app client secret>
 BLITZ_PUBLIC_SLACK_REDIRECT_URI=<Slack redirect URI>
 KNOCK_SLACK_CHANNEL_ID=<id of a Slack channel in Knock>
 ```
