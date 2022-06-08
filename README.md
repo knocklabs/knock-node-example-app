@@ -6,7 +6,7 @@ You can read more about this example app [in the Knock documentation](https://do
 
 ## Running locally
 
-First, configure the environment variables properly.
+First, configure the environment variables properly (see the bottom of this README).
 
 Then run:
 
@@ -14,7 +14,7 @@ Then run:
 blitz prisma migrate dev
 ```
 
-Then, lets get the database populated with seed data by running:
+Then, let's get the database populated with seed data by running:
 
 ```
 blitz db seed
@@ -26,7 +26,7 @@ Finally, we can start the development server by running:
 blitz dev
 ```
 
-You can take a look at the seed users credentials on the seed file in order to log in.
+You can take a look at the seed users credentials in the seed file in order to log in.
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
