@@ -46,7 +46,7 @@ BLITZ_PUBLIC_KNOCK_FEED_ID=<Knock in app feed channel id>
 
 # For Slack notifications
 BLITZ_PUBLIC_SLACK_CLIENT_KEY=<Slack client id>
-SLACK_CLIENT_SECRET=<Slack app client secrent>
+SLACK_CLIENT_SECRET=<Slack app client secret>
 BLITZ_PUBLIC_SLACK_REDIRECT_URI=<Slack redirect URI>
 KNOCK_SLACK_CHANNEL_ID=<id of a Slack channel in Knock>
 ```
