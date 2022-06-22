@@ -60,7 +60,6 @@ const Layout: React.FC<Props> = ({ children }) => {
           </Text>
           <Box ml="auto">
             <KnockFeedProvider
-              host={process.env.BLITZ_PUBLIC_KNOCK_HOST}
               apiKey={process.env.BLITZ_PUBLIC_KNOCK_CLIENT_ID!}
               feedId={process.env.BLITZ_PUBLIC_KNOCK_FEED_ID!}
               userId={`${user.id}`}

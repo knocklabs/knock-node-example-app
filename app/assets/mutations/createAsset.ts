@@ -4,9 +4,7 @@ import { z } from "zod"
 
 import { Knock, Recipient } from "@knocklabs/node"
 
-const knockClient = new Knock(process.env.KNOCK_API_KEY, {
-  host: process.env.BLITZ_PUBLIC_KNOCK_HOST,
-})
+const knockClient = new Knock(process.env.KNOCK_API_KEY)
 
 const CreateAsset = z.object({
   name: z.string(),
