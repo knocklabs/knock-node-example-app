@@ -1,6 +1,6 @@
 # **Knock + Node.js example app**
 
-This example app uses [Knock](https://knock.app) to power cross channel notifications via email, an in-app feed, and Slack inside of a full-stack Node  application, written in [Blitz.js](https://blitzjs.com/). It uses the [Knock Node SDK](https://github.com/knocklabs/knock-node) and [React in-app feed components](https://github.com/knocklabs/react-notification-feed).
+This example app uses [Knock](https://knock.app) to power cross channel notifications via email, an in-app feed, and Slack inside of a full-stack Node application, written in [Blitz.js](https://blitzjs.com/). It uses the [Knock Node SDK](https://github.com/knocklabs/knock-node) and [React in-app feed components](https://github.com/knocklabs/react-notification-feed).
 
 You can read more about this example app [in the Knock documentation](https://docs.knock.app/getting-started/example-app).
 
@@ -11,19 +11,19 @@ First, configure the environment variables properly (see the bottom of this READ
 Then run:
 
 ```
-blitz prisma migrate dev
+yarn blitz prisma migrate dev
 ```
 
 Then, let's get the database populated with seed data by running:
 
 ```
-blitz db seed
+yarn blitz db seed
 ```
 
 Finally, we can start the development server by running:
 
 ```
-blitz dev
+yarn blitz dev
 ```
 
 You can take a look at the seed users credentials in the seed file in order to log in.
