@@ -24,7 +24,7 @@ const HomePage = () => {
         router.push("/")
       }
     }
-  }, [])
+  })
 
   return <Spinner />
 }
