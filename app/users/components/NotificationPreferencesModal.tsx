@@ -30,9 +30,7 @@ const NotificationPreferencesModal = ({ user, isOpen, onClose }) => {
   const [preferences, setPreferences] = useState<PreferenceSet>()
 
   const knockClient = useMemo(() => {
-    const knock = new Knock(process.env.BLITZ_PUBLIC_KNOCK_CLIENT_ID!, {
-      host: process.env.BLITZ_PUBLIC_KNOCK_HOST,
-    })
+    const knock = new Knock(process.env.BLITZ_PUBLIC_KNOCK_CLIENT_ID!)
     knock.authenticate(user.id)
 
     return knock

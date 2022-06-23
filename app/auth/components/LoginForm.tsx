@@ -3,7 +3,7 @@ import { Form, FORM_ERROR } from "app/core/components/Form"
 import login from "app/auth/mutations/login"
 import { Login } from "app/auth/validations"
 
-import { Box, Flex, Heading, Text } from "@chakra-ui/layout"
+import { Box, Flex, Heading, Link, Text } from "@chakra-ui/layout"
 import { Input } from "@chakra-ui/input"
 import { Button } from "@chakra-ui/button"
 import { Field } from "formik"
@@ -26,6 +26,13 @@ export const LoginForm = (props: LoginFormProps) => {
       <Box borderWidth={1} p={6} borderColor="gray.200">
         <Heading size="lg">Collab App Example</Heading>
         <Text>To continue please enter your email.</Text>
+        <Text>
+          Or{" "}
+          <Link color="blue" href="/signup">
+            sign up here
+          </Link>{" "}
+          instead.
+        </Text>
 
         <Flex mt={6} w="400px">
           <Form

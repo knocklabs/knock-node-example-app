@@ -1,5 +1,5 @@
 import { useState, ReactNode, PropsWithoutRef } from "react"
-import { Formik, FormikProps } from "formik"
+import { Formik, FormikProps, Form as FormikForm } from "formik"
 import { validateZodSchema } from "blitz"
 import { z } from "zod"
 import { Box, Button, Flex } from "@chakra-ui/react"
@@ -47,8 +47,8 @@ export function Form<S extends z.ZodType<any, any>>({
         }
       }}
     >
-      {({ handleSubmit, isSubmitting }) => (
-        <form onSubmit={handleSubmit} {...props}>
+      {({ isSubmitting, errors }) => (
+        <FormikForm {...props}>
           {/* Form fields supplied as children are rendered here */}
           {children}
 
@@ -59,11 +59,15 @@ export function Form<S extends z.ZodType<any, any>>({
           )}
 
           {submitText && (
-            <Button type="submit" disabled={isSubmitting} mt={8}>
+            <Button
+              type="submit"
+              disabled={isSubmitting || Boolean(Object.keys(errors).length)}
+              mt={8}
+            >
               {submitText}
             </Button>
           )}
-        </form>
+        </FormikForm>
       )}
     </Formik>
   )

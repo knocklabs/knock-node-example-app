@@ -1,8 +1,9 @@
 import { useRef } from "react"
 import { Box, Flex, Text } from "@chakra-ui/layout"
-import { useRouter } from "blitz"
+import { useMutation, useRouter } from "blitz"
+import { FiLogOut } from "react-icons/fi"
 
-import { Avatar, useDisclosure } from "@chakra-ui/react"
+import { Avatar, Button, Icon, useDisclosure } from "@chakra-ui/react"
 import { Input } from "@chakra-ui/input"
 
 import {
@@ -15,6 +16,7 @@ import "@knocklabs/react-notification-feed/dist/index.css"
 
 import { useCurrentUser } from "app/core/hooks/useCurrentUser"
 import NotificationPreferencesModal from "app/users/components/NotificationPreferencesModal"
+import logout from "app/auth/mutations/logout"
 
 type Props = {
   children?: React.ReactElement
@@ -30,6 +32,7 @@ const Layout: React.FC<Props> = ({ children }) => {
     onOpen: onOpenSettingsModal,
     onClose: onCloseSettingsModal,
   } = useDisclosure()
+  const [logoutMutation] = useMutation(logout)
 
   const notifButtonRef = useRef(null)
 
@@ -60,7 +63,6 @@ const Layout: React.FC<Props> = ({ children }) => {
           </Text>
           <Box ml="auto">
             <KnockFeedProvider
-              host={process.env.BLITZ_PUBLIC_KNOCK_HOST}
               apiKey={process.env.BLITZ_PUBLIC_KNOCK_CLIENT_ID!}
               feedId={process.env.BLITZ_PUBLIC_KNOCK_FEED_ID!}
               userId={`${user.id}`}
@@ -77,6 +79,20 @@ const Layout: React.FC<Props> = ({ children }) => {
           </Box>
           {user?.name ? (
             <Avatar cursor="pointer" size="xs" name={user.name} onClick={onOpenSettingsModal} />
+          ) : (
+            ""
+          )}
+          {user?.name ? (
+            <Button
+              marginLeft="2"
+              size="sm"
+              variant="outline"
+              colorScheme="orange"
+              leftIcon={<Icon as={FiLogOut} />}
+              onClick={() => logoutMutation()}
+            >
+              Logout
+            </Button>
           ) : (
             ""
           )}
