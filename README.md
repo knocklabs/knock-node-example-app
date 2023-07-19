@@ -38,17 +38,17 @@ Ensure the `.env.local` file has required environment variables:
 DATABASE_URL=postgresql://<YOUR_DB_USERNAME>@localhost:5432/example-collaboration-app
 
 # Required for triggering Knock workflows
-KNOCK_API_KEY=<Knock server api key>
+KNOCK_API_KEY=<Knock secret API key>
 
 # Required for Knock's notification React feed component to render correctly
-BLITZ_PUBLIC_KNOCK_CLIENT_ID=<Knock client key>
-BLITZ_PUBLIC_KNOCK_FEED_ID=<Knock in app feed channel id>
+BLITZ_PUBLIC_KNOCK_CLIENT_ID=<Knock public API key>
+BLITZ_PUBLIC_KNOCK_FEED_ID=<Knock in-app feed channel ID>
 
 # For Slack notifications
-BLITZ_PUBLIC_SLACK_CLIENT_ID=<Slack client id>
+BLITZ_PUBLIC_SLACK_CLIENT_ID=<Slack client ID>
 SLACK_CLIENT_SECRET=<Slack app client secret>
 BLITZ_PUBLIC_SLACK_REDIRECT_URI=<Slack redirect URI>
-KNOCK_SLACK_CHANNEL_ID=<id of a Slack channel in Knock>
+KNOCK_SLACK_CHANNEL_ID=<Knock Slack channel ID>
 ```
 
 Ensure the `.env.test.local` file has required environment variables:
@@ -56,6 +56,12 @@ Ensure the `.env.test.local` file has required environment variables:
 ```
 DATABASE_URL=postgresql://<YOUR_DB_USERNAME>@localhost:5432/example-collaboration-app_test
 ```
+
+
+Here's more context on where to find the Knock variables you'll need above:
+* [Knock API keys](https://docs.knock.app/developer-tools/api-keys)
+* [Knock in-app feed channel ID](https://docs.knock.app/in-app-ui/react/feed#getting-started)
+* [Knock Slack channel ID](https://docs.knock.app/integrations/chat/slack/building-oauth-flow#how-to-set-slack-channel-data-in-knock)
 
 ## Slack notifications
 
