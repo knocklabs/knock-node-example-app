@@ -1,0 +1,74 @@
+{
+  "name": "new-comment",
+  "steps": [
+    {
+      "ref": "batch_1",
+      "settings": {
+        "batch_key": "comment.page_id",
+        "batch_order": "asc",
+        "batch_window": {
+          "unit": "seconds",
+          "value": 5
+        },
+        "batch_window_type": "fixed"
+      },
+      "type": "batch"
+    },
+    {
+      "channel_key": "in-app-feed",
+      "ref": "in_app_feed_1",
+      "template": {
+        "action_url": "{{ vars.app_url }}/pages/{{comment.page_id}}",
+        "markdown_body@": "in_app_feed_1/markdown_body.md"
+      },
+      "type": "channel"
+    },
+    {
+      "channel_key": "collab-io-slack-bot",
+      "ref": "chat_1",
+      "template": {
+        "markdown_body@": "chat_1/markdown_body.md"
+      },
+      "type": "channel"
+    },
+    {
+      "ref": "delay_1",
+      "settings": {
+        "delay_for": {
+          "unit": "minutes",
+          "value": 1
+        }
+      },
+      "type": "delay"
+    },
+    {
+      "channel_key": "postmark",
+      "conditions": {
+        "all": [
+          {
+            "argument": "$message.seen",
+            "operator": "less_than",
+            "variable": "refs.in_app_feed_1.status"
+          }
+        ]
+      },
+      "ref": "email_1",
+      "template": {
+        "settings": {
+          "layout_key": "default"
+        },
+        "subject": "New activity on {{ comment.page_name }}",
+        "visual_blocks@": "email_1/visual_blocks.json"
+      },
+      "type": "channel"
+    }
+  ],
+  "__readonly": {
+    "environment": "development",
+    "key": "new-comment",
+    "active": true,
+    "valid": true,
+    "created_at": "2022-05-24T20:43:56.067953Z",
+    "updated_at": "2022-10-10T17:27:06.978101Z"
+  }
+}

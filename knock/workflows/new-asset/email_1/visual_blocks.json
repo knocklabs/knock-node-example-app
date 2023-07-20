@@ -1,0 +1,14 @@
+[
+  {
+    "layout_attrs": {
+      "padding_bottom": 8,
+      "padding_left": 4,
+      "padding_right": 4,
+      "padding_top": 8
+    },
+    "type": "markdown",
+    "variant": "default",
+    "version": 1,
+    "content@": "visual_blocks/1.content.md"
+  }
+]
