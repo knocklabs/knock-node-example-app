@@ -30,7 +30,7 @@ You can take a look at the seed users credentials in the seed file in order to l
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-## Environment Variables
+## Environment variables
 
 Ensure the `.env.local` file has required environment variables:
 
