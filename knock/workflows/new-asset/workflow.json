@@ -1,0 +1,46 @@
+{
+  "name": "New asset",
+  "steps": [
+    {
+      "channel_key": "in-app-feed",
+      "ref": "in_app_feed_1",
+      "template": {
+        "action_url": "{{ vars.app_url }}",
+        "markdown_body@": "in_app_feed_1/markdown_body.md"
+      },
+      "type": "channel"
+    },
+    {
+      "ref": "batch_1",
+      "settings": {
+        "batch_order": "asc",
+        "batch_window": {
+          "unit": "hours",
+          "value": 1
+        },
+        "batch_window_type": "fixed"
+      },
+      "type": "batch"
+    },
+    {
+      "channel_key": "postmark",
+      "ref": "email_1",
+      "template": {
+        "settings": {
+          "layout_key": "default"
+        },
+        "subject": "New asset",
+        "visual_blocks@": "email_1/visual_blocks.json"
+      },
+      "type": "channel"
+    }
+  ],
+  "__readonly": {
+    "environment": "development",
+    "key": "new-asset",
+    "active": true,
+    "valid": true,
+    "created_at": "2022-05-24T19:37:06.888337Z",
+    "updated_at": "2022-05-24T19:39:04.199861Z"
+  }
+}

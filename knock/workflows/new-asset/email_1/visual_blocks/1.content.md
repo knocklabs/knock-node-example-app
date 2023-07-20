@@ -1,0 +1,1 @@
+Hey **{{ recipient.name | split: ' ' | first }}** 👋 - {{ actor.name }} created a new asset on {{project_name}}. 
