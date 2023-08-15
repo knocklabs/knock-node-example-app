@@ -5,8 +5,8 @@ import { Login } from "app/auth/validations"
 
 import { Box, Flex, Heading, Link, Text } from "@chakra-ui/layout"
 import { Input } from "@chakra-ui/input"
-import { Button } from "@chakra-ui/button"
 import { Field } from "formik"
+import { Center } from "@chakra-ui/react"
 
 type LoginFormProps = {
   onSuccess?: (user: PromiseReturnType<typeof login>) => void
@@ -16,13 +16,7 @@ export const LoginForm = (props: LoginFormProps) => {
   const [loginMutation] = useMutation(login)
 
   return (
-    <Flex
-      alignItems="center"
-      justifyContent="center"
-      flexDirection="column"
-      width="100vw"
-      height="100vh"
-    >
+    <Center height="100vh">
       <Box borderWidth={1} p={6} borderColor="gray.200">
         <Heading size="lg">Collab App Example</Heading>
         <Text>To continue please enter your email.</Text>
@@ -64,7 +58,7 @@ export const LoginForm = (props: LoginFormProps) => {
           </Form>
         </Flex>
       </Box>
-    </Flex>
+    </Center>
   )
 }
 

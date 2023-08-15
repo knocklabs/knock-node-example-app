@@ -1,10 +1,10 @@
 import { useEffect, Suspense } from "react"
-import { BlitzPage, useMutation, usePaginatedQuery } from "blitz"
+import { BlitzPage, usePaginatedQuery } from "blitz"
 import { useRouter, Routes } from "blitz"
 import { useCurrentUser } from "app/core/hooks/useCurrentUser"
 import getWorkspaces from "app/workspaces/queries/getWorkspaces"
 
-import { Spinner } from "@chakra-ui/react"
+import FallbackSpinner from "app/core/components/FallbackSpinner"
 
 const HomePage = () => {
   const router = useRouter()
@@ -24,9 +24,9 @@ const HomePage = () => {
         router.push("/")
       }
     }
-  })
+  }, [user, router, workspacesResponse])
 
-  return <Spinner />
+  return <FallbackSpinner />
 }
 
 const Home: BlitzPage = () => {

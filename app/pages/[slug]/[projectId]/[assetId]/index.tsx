@@ -7,7 +7,8 @@ import CommentList from "app/comments/components/CommentList"
 
 import Layout from "app/core/components/Layout"
 import { AspectRatio, Box, Flex, Heading, Text } from "@chakra-ui/layout"
-import { Image, Spinner } from "@chakra-ui/react"
+import { Divider, Image } from "@chakra-ui/react"
+import FallbackSpinner from "app/core/components/FallbackSpinner"
 
 const AssetPageComponent = () => {
   const router = useRouter()
@@ -19,13 +20,13 @@ const AssetPageComponent = () => {
 
   if (!project || !slug) {
     router.push("/")
-    return <Spinner />
+    return <FallbackSpinner />
   }
 
   return (
     <Layout>
-      <Flex flex={1}>
-        <Box p={6} width="100%" height="100%" position="relative">
+      <Flex height="100%" width="100%">
+        <Flex flexDir="column" p={6} width="100%" height="100%" position="relative">
           <Link href={Routes.ProjectPage({ slug: slug, projectId: project.id })}>
             <a>&#8592; Back to {project.name}</a>
           </Link>
@@ -37,17 +38,11 @@ const AssetPageComponent = () => {
           <AspectRatio width="90%" ratio={16 / 9}>
             <Image src={asset.url} objectFit="cover" alt="Image" />
           </AspectRatio>
-        </Box>
-        <Flex
-          width="390px"
-          flexShrink={0}
-          ml="auto"
-          flexDir="column"
-          borderLeftWidth={1}
-          borderLeftColor="gray.200"
-          position="relative"
-          height="calc(100vh - 56px)"
-        >
+        </Flex>
+        <Flex height="calc(100vh - 70px)">
+          <Divider orientation="vertical" />
+        </Flex>
+        <Flex height="100%" width="400px" flexDir="column">
           <Box borderBottomColor="gray.200" borderBottomWidth={1} p={4}>
             <Text fontSize="sm">
               <Text fontWeight="semibold" display="inline">
@@ -70,7 +65,7 @@ const AssetPageComponent = () => {
 
 const AssetPage: BlitzPage = () => {
   return (
-    <Suspense fallback={<Spinner />}>
+    <Suspense fallback={<FallbackSpinner />}>
       <AssetPageComponent />
     </Suspense>
   )

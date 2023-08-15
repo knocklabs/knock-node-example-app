@@ -24,7 +24,7 @@ export default resolver.pipe(resolver.zod(Signup), async ({ email, password, nam
 
   if (user) {
     if (workspace) {
-      const worspaceSeat = await db.workspace_seat.create({
+      await db.workspace_seat.create({
         data: {
           userId: user.id,
           workspaceId: workspace.id,
@@ -32,37 +32,45 @@ export default resolver.pipe(resolver.zod(Signup), async ({ email, password, nam
       })
     }
 
-    // Identify user on Knock so we the data is accesible when triggering workflows
+    // Identify user on Knock so we the data is accessible when triggering workflows
     await knockClient.users.identify(`${user.id}`, { email: user.email, name: user.name })
 
     // Trigger the welcome email workflow
-    await knockClient.notify("welcome", {
-      data: {
-        workspace: workspace?.name || "Default",
-      },
-      recipients: [`${user.id}`],
-    })
+    try {
+      await knockClient.notify("welcome", {
+        data: {
+          workspace: workspace?.name || "Default",
+        },
+        recipients: [`${user.id}`],
+      })
+    } catch (error) {
+      console.error("Welcome notification error:", error)
+    }
 
-    await knockClient.users.setWorkflowsPreferences(`${user.id}`, {
-      "new-comment": {
-        conditions: [
-          {
-            variable: "recipient.muted_projects",
-            operator: "not_contains",
-            argument: "data.projectId",
-          },
-        ],
-      },
-      "new-asset": {
-        conditions: [
-          {
-            variable: "recipient.muted_projects",
-            operator: "not_contains",
-            argument: "data.projectId",
-          },
-        ],
-      },
-    })
+    try {
+      await knockClient.users.setWorkflowsPreferences(`${user.id}`, {
+        "new-comment": {
+          conditions: [
+            {
+              variable: "recipient.muted_projects",
+              operator: "not_contains",
+              argument: "data.projectId",
+            },
+          ],
+        },
+        "new-asset": {
+          conditions: [
+            {
+              variable: "recipient.muted_projects",
+              operator: "not_contains",
+              argument: "data.projectId",
+            },
+          ],
+        },
+      })
+    } catch (error) {
+      console.error("Error setting preferences:", error)
+    }
 
     await ctx.session.$create({ userId: user.id, role: user.role as Role })
 

@@ -13,13 +13,12 @@ import {
   ModalHeader,
   ModalOverlay,
   SimpleGrid,
-  Spinner,
-  useDisclosure,
 } from "@chakra-ui/react"
 
 import { Formik, Field } from "formik"
 
 import Knock, { PreferenceSet, WorkflowPreferences } from "@knocklabs/client"
+import FallbackSpinner from "app/core/components/FallbackSpinner"
 
 const workflowKeyToName = {
   "new-comment": "New comments",
@@ -42,14 +41,8 @@ const NotificationPreferencesModal = ({ user, isOpen, onClose }) => {
     })
   }, [knockClient])
 
-  const {
-    isOpen: isSettingsModalOpen,
-    onOpen: onOpenSettingsModal,
-    onClose: onCloseSettingsModal,
-  } = useDisclosure()
-
   if (!preferences) {
-    return <Spinner />
+    return <FallbackSpinner />
   }
 
   const preparedPreferencesWorkflows: WorkflowPreferences = {

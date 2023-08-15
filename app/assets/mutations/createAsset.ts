@@ -69,16 +69,19 @@ export default resolver.pipe(
 
     // Notify recipients on Knock. This should be done asynchronously
     // (for example using background jobs, or other similar pattern)
-    await knockClient.notify("new-asset", {
-      actor: `${userId}`,
-      recipients,
-      data: {
-        asset_url: asset.url,
-        project_name: asset.project.name,
-        projectId: asset.project.id,
-      },
-    })
-
-    return asset
+    try {
+      await knockClient.notify("new-asset", {
+        actor: `${userId}`,
+        recipients,
+        data: {
+          asset_url: asset.url,
+          project_name: asset.project.name,
+          projectId: asset.project.id,
+        },
+      })
+      return asset
+    } catch (error) {
+      console.error("Create asset notification error:", error)
+    }
   }
 )
