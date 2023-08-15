@@ -2,6 +2,7 @@ import db from "./index"
 import { SecurePassword } from "blitz"
 
 import { Knock } from "@knocklabs/node"
+import { NEW_ASSET, NEW_COMMENT } from "app/lib/workflows"
 
 const knockClient = new Knock(process.env.KNOCK_API_KEY)
 
@@ -104,7 +105,7 @@ const seed = async () => {
     users.map((u) => `${u.id}`),
     {
       workflows: {
-        "new-comment": {
+        [NEW_COMMENT]: {
           conditions: [
             {
               variable: "recipient.muted_projects",
@@ -113,7 +114,7 @@ const seed = async () => {
             },
           ],
         },
-        "new-asset": {
+        [NEW_ASSET]: {
           conditions: [
             {
               variable: "recipient.muted_projects",

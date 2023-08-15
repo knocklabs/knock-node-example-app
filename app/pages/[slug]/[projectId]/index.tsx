@@ -10,7 +10,7 @@ import { useCurrentUser } from "app/core/hooks/useCurrentUser"
 
 import { Avatar } from "@chakra-ui/avatar"
 import { AspectRatio, Box, Flex, Heading, ListItem, Text, UnorderedList } from "@chakra-ui/layout"
-import { Switch, Image, Button, useDisclosure } from "@chakra-ui/react"
+import { Switch, Image, Button, useDisclosure, useToast } from "@chakra-ui/react"
 import CreateAssetModal from "app/projects/components/CreateAssetModal"
 import FallbackSpinner from "app/core/components/FallbackSpinner"
 
@@ -22,9 +22,17 @@ const ProjectPageComponent = () => {
   const { user } = useCurrentUser()
 
   const { isOpen, onOpen, onClose } = useDisclosure()
+  const toast = useToast()
 
   const [createAssetMutation] = useMutation(createAsset, {
-    onSuccess: () => {
+    onSuccess: (result) => {
+      if ("notify" in result && !result?.notify?.success) {
+        toast({
+          status: "error",
+          title: "Notification failed",
+          description: `Make sure you have a workflow called ${result?.notify?.workflow} in Knock.`,
+        })
+      }
       refetch()
     },
   })

@@ -3,6 +3,7 @@ import db from "db"
 import { z } from "zod"
 
 import { Knock, Recipient } from "@knocklabs/node"
+import { NEW_ASSET } from "app/lib/workflows"
 
 const knockClient = new Knock(process.env.KNOCK_API_KEY)
 
@@ -67,10 +68,11 @@ export default resolver.pipe(
     // Add the project as a recipient for the case we are sending Slack notifications
     recipients.push({ id: `${projectId}`, collection: "projects" })
 
+    const notify = { success: false, workflow: NEW_ASSET }
     // Notify recipients on Knock. This should be done asynchronously
     // (for example using background jobs, or other similar pattern)
     try {
-      await knockClient.notify("new-asset", {
+      await knockClient.notify(NEW_ASSET, {
         actor: `${userId}`,
         recipients,
         data: {
@@ -79,9 +81,10 @@ export default resolver.pipe(
           projectId: asset.project.id,
         },
       })
-      return asset
     } catch (error) {
       console.error("Create asset notification error:", error)
     }
+
+    return { asset, notify }
   }
 )

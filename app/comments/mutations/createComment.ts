@@ -3,6 +3,7 @@ import db from "db"
 import { z } from "zod"
 
 import { Knock, Recipient } from "@knocklabs/node"
+import { NEW_COMMENT } from "app/lib/workflows"
 
 const knockClient = new Knock(process.env.KNOCK_API_KEY)
 
@@ -81,8 +82,13 @@ export default resolver.pipe(
 
       // Notify recipients on Knock. This should be done asynchronously
       // (for example using background jobs, or other similar pattern).
+      const notify = {
+        workflow: NEW_COMMENT,
+        success: false,
+      }
+
       try {
-        await knockClient.notify("new-comment", {
+        await knockClient.notify(NEW_COMMENT, {
           actor: `${userId}`,
           recipients,
           data: {
@@ -93,11 +99,13 @@ export default resolver.pipe(
             projectId: project.id,
           },
         })
+
+        notify.success = true
       } catch (error) {
         console.error("Error creating comment:", error)
       }
 
-      return comment
+      return { comment, notify }
     }
   }
 )

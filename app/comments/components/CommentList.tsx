@@ -8,27 +8,36 @@ import { useRef, useState, useEffect } from "react"
 import { useCurrentUser } from "app/core/hooks/useCurrentUser"
 import createComment from "app/comments/mutations/createComment"
 import * as analytics from "app/lib/analytics"
+import { useToast } from "@chakra-ui/react"
 
 const CommentList = ({ asset, project, slug, refetch }) => {
   const paneRef = useRef<HTMLDivElement>(null)
   const [commentText, setCommentText] = useState("")
   const { user } = useCurrentUser()
+  const toast = useToast()
 
   const [createCommentMutation] = useMutation(createComment, {
     onSuccess: (result) => {
       if (typeof window !== "undefined" && analytics.ENABLE_SEGMENT) {
         analytics.track("comment-created", {
           author: user,
-          text: result?.text,
-          createdAt: result?.createdAt,
-          id: result?.id,
-          assetId: result?.assetId,
+          text: result?.comment?.text,
+          createdAt: result?.comment?.createdAt,
+          id: result?.comment?.id,
+          assetId: result?.comment?.assetId,
+        })
+      }
+
+      if (!result?.notify?.success) {
+        toast({
+          status: "error",
+          title: "Notification failed",
+          description: `Make sure you have a workflow called ${result?.notify?.workflow} in Knock.`,
         })
       }
 
       refetch()
     },
-    onError: (e) => console.error("Create comment error:", e),
   })
 
   const handleSendComment = async (e) => {

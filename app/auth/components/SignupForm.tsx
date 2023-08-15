@@ -6,14 +6,26 @@ import { Signup } from "app/auth/validations"
 import { Box, Flex, Heading, Text } from "@chakra-ui/layout"
 import { Input } from "@chakra-ui/input"
 import { Field } from "formik"
-import { Center } from "@chakra-ui/react"
+import { Center, useToast } from "@chakra-ui/react"
 
 type SignupFormProps = {
   onSuccess?: () => void
 }
 
 export const SignupForm = (props: SignupFormProps) => {
-  const [signupMutation] = useMutation(signup)
+  const toast = useToast()
+
+  const [signupMutation] = useMutation(signup, {
+    onSuccess: (result) => {
+      if (result && !result?.notify?.success) {
+        toast({
+          status: "error",
+          title: "Notification failed",
+          description: `Make sure you have welcome, new-comment, and new-asset workflows in Knock.`,
+        })
+      }
+    },
+  })
 
   return (
     <Center height="100vh">

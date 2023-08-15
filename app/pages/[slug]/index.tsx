@@ -62,7 +62,7 @@ const WorkspacePageComponent = () => {
 
 const WorkspacePage: BlitzPage = () => {
   return (
-    <Suspense fallback={<Flex height="100px" width="100px" backgroundColor="red" />}>
+    <Suspense fallback={<FallbackSpinner />}>
       <WorkspacePageComponent />
     </Suspense>
   )

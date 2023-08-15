@@ -3,6 +3,7 @@ import db from "db"
 import { Signup } from "app/auth/validations"
 import { Role } from "types"
 import { Knock } from "@knocklabs/node"
+import { NEW_ASSET, NEW_COMMENT, WELCOME } from "app/lib/workflows"
 
 const knockClient = new Knock(process.env.KNOCK_API_KEY)
 
@@ -35,21 +36,24 @@ export default resolver.pipe(resolver.zod(Signup), async ({ email, password, nam
     // Identify user on Knock so we the data is accessible when triggering workflows
     await knockClient.users.identify(`${user.id}`, { email: user.email, name: user.name })
 
+    const notify = { success: false }
+
     // Trigger the welcome email workflow
     try {
-      await knockClient.notify("welcome", {
+      await knockClient.notify(WELCOME, {
         data: {
           workspace: workspace?.name || "Default",
         },
         recipients: [`${user.id}`],
       })
+      notify.success = true
     } catch (error) {
       console.error("Welcome notification error:", error)
     }
 
     try {
       await knockClient.users.setWorkflowsPreferences(`${user.id}`, {
-        "new-comment": {
+        [NEW_COMMENT]: {
           conditions: [
             {
               variable: "recipient.muted_projects",
@@ -58,7 +62,7 @@ export default resolver.pipe(resolver.zod(Signup), async ({ email, password, nam
             },
           ],
         },
-        "new-asset": {
+        [NEW_ASSET]: {
           conditions: [
             {
               variable: "recipient.muted_projects",
@@ -69,11 +73,12 @@ export default resolver.pipe(resolver.zod(Signup), async ({ email, password, nam
         },
       })
     } catch (error) {
+      notify.success = false
       console.error("Error setting preferences:", error)
     }
 
     await ctx.session.$create({ userId: user.id, role: user.role as Role })
 
-    return user
+    return { user, notify }
   }
 })
