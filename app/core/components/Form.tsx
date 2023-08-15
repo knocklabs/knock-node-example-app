@@ -2,7 +2,7 @@ import { useState, ReactNode, PropsWithoutRef } from "react"
 import { Formik, FormikProps, Form as FormikForm } from "formik"
 import { validateZodSchema } from "blitz"
 import { z } from "zod"
-import { Box, Button, Flex } from "@chakra-ui/react"
+import { Box, Button } from "@chakra-ui/react"
 
 export interface FormProps<S extends z.ZodType<any, any>>
   extends Omit<PropsWithoutRef<JSX.IntrinsicElements["form"]>, "onSubmit"> {

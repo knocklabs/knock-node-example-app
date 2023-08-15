@@ -10,6 +10,7 @@ import {
 import LoginForm from "app/auth/components/LoginForm"
 import { ChakraProvider } from "@chakra-ui/react"
 import theme from "app/core/theme"
+import * as analytics from "app/lib/analytics"
 
 export default function App({ Component, pageProps }: AppProps) {
   const getLayout = Component.getLayout || ((page) => page)
@@ -20,6 +21,7 @@ export default function App({ Component, pageProps }: AppProps) {
         FallbackComponent={RootErrorFallback}
         onReset={useQueryErrorResetBoundary().reset}
       >
+        {analytics.ENABLE_SEGMENT && <analytics.Snippet />}
         {getLayout(<Component {...pageProps} />)}
       </ErrorBoundary>
     </ChakraProvider>

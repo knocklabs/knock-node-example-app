@@ -7,14 +7,35 @@ import { useRef, useState, useEffect } from "react"
 
 import { useCurrentUser } from "app/core/hooks/useCurrentUser"
 import createComment from "app/comments/mutations/createComment"
+import * as analytics from "app/lib/analytics"
+import { useToast } from "@chakra-ui/react"
 
 const CommentList = ({ asset, project, slug, refetch }) => {
   const paneRef = useRef<HTMLDivElement>(null)
   const [commentText, setCommentText] = useState("")
   const { user } = useCurrentUser()
+  const toast = useToast()
 
   const [createCommentMutation] = useMutation(createComment, {
-    onSuccess: () => {
+    onSuccess: (result) => {
+      if (analytics.ENABLE_SEGMENT) {
+        analytics.track("new-comment", {
+          comment: {
+            body: result?.comment.text,
+            page_name: asset.name,
+          },
+          recipients: result?.recipients,
+        })
+      }
+
+      if (!result?.notify?.success) {
+        toast({
+          status: "error",
+          title: "Notification failed",
+          description: `Make sure you have a workflow called ${result?.notify?.workflow} in Knock.`,
+        })
+      }
+
       refetch()
     },
   })
@@ -48,8 +69,14 @@ const CommentList = ({ asset, project, slug, refetch }) => {
   }, [asset.comments])
 
   return (
-    <>
-      <Box maxH="calc(100vh - 250px)" overflowY="auto" ref={paneRef}>
+    <Flex
+      flexDir="column"
+      height="100%"
+      justifyContent="space-between"
+      maxHeight={"calc(100vh - 170px)"}
+      overflow="hidden"
+    >
+      <Box overflowY="auto" ref={paneRef} flexGrow={1}>
         {asset.comments.map((comment) => (
           <Box
             data-id={comment.id}
@@ -69,27 +96,22 @@ const CommentList = ({ asset, project, slug, refetch }) => {
         ))}
       </Box>
 
-      <Flex
-        backgroundColor="white"
-        flexDir="column"
-        borderTopColor="gray.200"
-        borderTopWidth={1}
-        mt="auto"
-      >
-        <form onSubmit={handleSendComment}>
+      <form onSubmit={handleSendComment}>
+        <Flex backgroundColor="white" flexDir="column">
           <Textarea
             size="xs"
             placeholder="Leave your comment"
-            borderColor="transparent"
             value={commentText}
             onChange={(e) => setCommentText(e.target.value)}
           />
-          <Button type="submit" size="xs" ml="auto" mt={1}>
-            Send
-          </Button>
-        </form>
-      </Flex>
-    </>
+          <Flex justifyContent="flex-end" mr={2} my={2}>
+            <Button type="submit" size="xs">
+              Send
+            </Button>
+          </Flex>
+        </Flex>
+      </form>
+    </Flex>
   )
 }
 
