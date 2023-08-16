@@ -23,8 +23,6 @@ const AssetPageComponent = () => {
     return <FallbackSpinner />
   }
 
-  console.log("asset page", process.env.ENABLE_SEGMENT)
-
   return (
     <Layout>
       <Flex height="100%" width="100%">
