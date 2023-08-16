@@ -25,6 +25,7 @@ const CommentList = ({ asset, project, slug, refetch }) => {
           createdAt: result?.comment?.createdAt,
           id: result?.comment?.id,
           assetId: result?.comment?.assetId,
+          recipients: result?.recipients,
         })
       }
 

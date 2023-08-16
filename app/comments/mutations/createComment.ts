@@ -105,7 +105,7 @@ export default resolver.pipe(
         console.error("Error creating comment:", error)
       }
 
-      return { comment, notify }
+      return { comment, notify, recipients }
     }
   }
 )
