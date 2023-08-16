@@ -21,6 +21,7 @@ export function identify(user) {
 }
 
 export function track(eventName: string, attrs = {}) {
+  console.log("track", attrs)
   window?.analytics?.track(eventName, attrs)
 }
 
@@ -28,8 +29,19 @@ export function page(pageName: string, properties = {}) {
   window?.analytics?.page(pageName, properties)
 }
 
-export const SEGMENT_WRITE_KEY = process.env.SEGMENT_WRITE_KEY
-export const ENABLE_SEGMENT = process.env.ENABLE_SEGMENT
+export const SEGMENT_WRITE_KEY = process.env.BLITZ_PUBLIC_SEGMENT_WRITE_KEY!
+export const ENABLE_SEGMENT = process.env.BLITZ_PUBLIC_ENABLE_SEGMENT!
+
+export const enableSegment = () => {
+  if (process.browser) {
+    // Code executed on the client side
+    console.log("Client-side rendering analytics")
+  } else {
+    // Code executed on the server side
+    console.log("Server-side rendering analytics")
+  }
+  process.env.ENABLE_SEGMENT!
+}
 
 function renderSnippet() {
   const opts = {
