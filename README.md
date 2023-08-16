@@ -69,4 +69,4 @@ to your local web server.
 
 ## Segment integration
 
-In order to send events to Segment, you'll need to expose an endpoint Segment can access as [a new source's](https://segment.com/docs/connections/sources/#create-a-source) website URL. Again, you can use [ngrok](https://ngrok.com/) to create a public tunnel to your local web server. Then check out the `app/lib/analytics.tsx` file to see how you can use [track, page and identify](https://segment.com/docs/connections/sources/catalog/libraries/website/javascript/#basic-tracking-methods) events throughout your code to send events from this app to Segment.
+In order to send events to Segment, you'll need to the the write key from [a source you create](https://segment.com/docs/connections/sources/#create-a-source) in Segment and set it in your `.env` file as the `BLITZ_PUBLIC_SEGMENT_WRITE_KEY`, as well as setting `ENABLE_SEGMENT` to `true`. Check out the `app/lib/analytics.tsx` file to see how you can use [track, page and identify](https://segment.com/docs/connections/sources/catalog/libraries/website/javascript/#basic-tracking-methods) events throughout your code to send events from this app to Segment.
