@@ -70,7 +70,7 @@ const ProjectPageComponent = () => {
             )}
           </Flex>
 
-          <Flex>
+          <Flex flexWrap={"wrap"}>
             {project.assets?.map((asset) => (
               <Box
                 key={asset.id}
@@ -80,6 +80,7 @@ const ProjectPageComponent = () => {
                 borderRadius="md"
                 overflow="hidden"
                 ml={4}
+                mb={4}
               >
                 <Link href={Routes.AssetPage({ slug, projectId: project.id, assetId: asset.id })}>
                   <a>
