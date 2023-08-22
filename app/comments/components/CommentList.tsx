@@ -5,7 +5,6 @@ import { Box, Flex, Text } from "@chakra-ui/layout"
 import { Textarea } from "@chakra-ui/textarea"
 import { useRef, useState, useEffect } from "react"
 
-import { useCurrentUser } from "app/core/hooks/useCurrentUser"
 import createComment from "app/comments/mutations/createComment"
 import * as analytics from "app/lib/analytics"
 import { useToast } from "@chakra-ui/react"
@@ -13,18 +12,16 @@ import { useToast } from "@chakra-ui/react"
 const CommentList = ({ asset, project, slug, refetch }) => {
   const paneRef = useRef<HTMLDivElement>(null)
   const [commentText, setCommentText] = useState("")
-  const { user } = useCurrentUser()
   const toast = useToast()
 
   const [createCommentMutation] = useMutation(createComment, {
     onSuccess: (result) => {
       if (analytics.ENABLE_SEGMENT) {
-        analytics.track("comment-created", {
-          author: user,
-          text: result?.comment?.text,
-          createdAt: result?.comment?.createdAt,
-          id: result?.comment?.id,
-          assetId: result?.comment?.assetId,
+        analytics.track("comment-posted", {
+          comment: {
+            body: result?.comment.text,
+            page_name: asset.name,
+          },
           recipients: result?.recipients,
         })
       }

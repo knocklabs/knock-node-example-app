@@ -35,7 +35,7 @@ const AssetPageComponent = () => {
             {asset.name}
           </Heading>
 
-          <AspectRatio width="90%" ratio={16 / 9}>
+          <AspectRatio width="80%" ratio={16 / 9}>
             <Image src={asset.url} objectFit="cover" alt="Image" />
           </AspectRatio>
         </Flex>

@@ -3,7 +3,7 @@ import { Box, Flex, Text } from "@chakra-ui/layout"
 import { useMutation } from "blitz"
 import { FiLogOut } from "react-icons/fi"
 
-import { Button, Icon, IconButton, useDisclosure } from "@chakra-ui/react"
+import { Avatar, Button, Icon, IconButton, useDisclosure } from "@chakra-ui/react"
 import { SettingsIcon } from "@chakra-ui/icons"
 
 import {
@@ -56,16 +56,18 @@ const Layout: React.FC<Props> = ({ children }) => {
         py={3}
         height="70px"
       >
-        <Flex>
+        <Flex alignItems="center">
           <Text
             textTransform="uppercase"
             letterSpacing={2}
             fontSize={16}
             color="blue.500"
             fontWeight={600}
+            mr={3}
           >
             Collab
           </Text>
+          <Avatar name={user.name} size="sm" />
         </Flex>
         <Flex alignItems="center">
           <Box>
@@ -80,6 +82,7 @@ const Layout: React.FC<Props> = ({ children }) => {
                   buttonRef={notifButtonRef}
                   isVisible={isFeedOpen}
                   onClose={onCloseFeed}
+                  placement="bottom-end"
                 />
               </Box>
             </KnockFeedProvider>

@@ -78,32 +78,31 @@ export default resolver.pipe(
         .map((m) => `${m.userId}`)
 
       // Add the project as a recipient for the case we are sending Slack notifications
-      recipients.push({ id: `${project.id}`, collection: "projects" })
+      // recipients.push({ id: `${project.id}`, collection: "projects" })
 
       // Notify recipients on Knock. This should be done asynchronously
       // (for example using background jobs, or other similar pattern).
       const notify = {
         workflow: NEW_COMMENT,
-        success: false,
+        success: true,
       }
 
-      try {
-        await knockClient.notify(NEW_COMMENT, {
-          actor: `${userId}`,
-          recipients,
-          data: {
-            comment_content: comment.text,
-            asset_name: asset.name,
-            asset_url: asset.url,
-            project_name: project.name,
-            projectId: project.id,
-          },
-        })
+      // try {
+      //   await knockClient.notify(NEW_COMMENT, {
+      //     actor: `${userId}`,
+      //     recipients,
+      //     data: {
+      //       comment: {
+      //         body: comment.text,
+      //         page_name: asset.name,
+      //       },
+      //     },
+      //   })
 
-        notify.success = true
-      } catch (error) {
-        console.error("Error creating comment:", error)
-      }
+      //   notify.success = true
+      // } catch (error) {
+      //   console.error("Error creating comment:", error)
+      // }
 
       return { comment, notify, recipients }
     }
