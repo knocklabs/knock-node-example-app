@@ -17,7 +17,7 @@ const CommentList = ({ asset, project, slug, refetch }) => {
   const [createCommentMutation] = useMutation(createComment, {
     onSuccess: (result) => {
       if (analytics.ENABLE_SEGMENT) {
-        analytics.track("comment-posted", {
+        analytics.track("new-comment", {
           comment: {
             body: result?.comment.text,
             page_name: asset.name,
