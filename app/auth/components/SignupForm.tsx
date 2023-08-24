@@ -5,24 +5,30 @@ import { Signup } from "app/auth/validations"
 
 import { Box, Flex, Heading, Text } from "@chakra-ui/layout"
 import { Input } from "@chakra-ui/input"
-import { Button } from "@chakra-ui/button"
 import { Field } from "formik"
+import { Center, useToast } from "@chakra-ui/react"
 
 type SignupFormProps = {
   onSuccess?: () => void
 }
 
 export const SignupForm = (props: SignupFormProps) => {
-  const [signupMutation] = useMutation(signup)
+  const toast = useToast()
+
+  const [signupMutation] = useMutation(signup, {
+    onSuccess: (result) => {
+      if (result && !result?.notify?.success) {
+        toast({
+          status: "error",
+          title: "Notification failed",
+          description: `Make sure you have welcome, new-comment, and new-asset workflows in Knock.`,
+        })
+      }
+    },
+  })
 
   return (
-    <Flex
-      alignItems="center"
-      justifyContent="center"
-      flexDirection="column"
-      width="100vw"
-      height="100vh"
-    >
+    <Center height="100vh">
       <Box borderWidth={1} p={6} borderColor="gray.200">
         <Heading size="lg">Collab App Example</Heading>
         <Text>Create an Account.</Text>
@@ -56,7 +62,7 @@ export const SignupForm = (props: SignupFormProps) => {
           </Form>
         </Flex>
       </Box>
-    </Flex>
+    </Center>
   )
 }
 

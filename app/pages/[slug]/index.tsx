@@ -1,12 +1,12 @@
 import { BlitzPage, useRouter, useParam, useQuery, Link, Routes } from "blitz"
-import { useEffect, Suspense } from "react"
+import { Suspense } from "react"
 
 import getWorkspace from "app/workspaces/queries/getWorkspace"
 
 import Layout from "app/core/components/Layout"
 import { Avatar } from "@chakra-ui/avatar"
-import { Spinner } from "@chakra-ui/spinner"
-import { Box, Flex, Heading, ListItem, Text, UnorderedList } from "@chakra-ui/layout"
+import { Box, Flex, Heading } from "@chakra-ui/layout"
+import FallbackSpinner from "app/core/components/FallbackSpinner"
 
 const WorkspacePageComponent = () => {
   const router = useRouter()
@@ -15,7 +15,7 @@ const WorkspacePageComponent = () => {
 
   if (!workspace || !slug) {
     router.push("/")
-    return <Spinner />
+    return <FallbackSpinner />
   }
 
   return (
@@ -62,7 +62,7 @@ const WorkspacePageComponent = () => {
 
 const WorkspacePage: BlitzPage = () => {
   return (
-    <Suspense fallback={<Spinner />}>
+    <Suspense fallback={<FallbackSpinner />}>
       <WorkspacePageComponent />
     </Suspense>
   )

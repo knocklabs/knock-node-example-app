@@ -3,6 +3,7 @@ import db from "db"
 import { z } from "zod"
 
 import { Knock, Recipient } from "@knocklabs/node"
+import { NEW_COMMENT } from "app/lib/workflows"
 
 const knockClient = new Knock(process.env.KNOCK_API_KEY)
 
@@ -80,20 +81,31 @@ export default resolver.pipe(
       recipients.push({ id: `${project.id}`, collection: "projects" })
 
       // Notify recipients on Knock. This should be done asynchronously
-      // (for example using background jobs, or other similar pattern)
-      await knockClient.notify("new-comment", {
-        actor: `${userId}`,
-        recipients,
-        data: {
-          comment_content: comment.text,
-          asset_name: asset.name,
-          asset_url: asset.url,
-          project_name: project.name,
-          projectId: project.id,
-        },
-      })
+      // (for example using background jobs, or other similar pattern).
+      const notify = {
+        workflow: NEW_COMMENT,
+        success: false,
+      }
 
-      return comment
+      try {
+        await knockClient.notify(NEW_COMMENT, {
+          actor: `${userId}`,
+          recipients,
+          data: {
+            comment_content: comment.text,
+            asset_name: asset.name,
+            asset_url: asset.url,
+            project_name: project.name,
+            projectId: project.id,
+          },
+        })
+
+        notify.success = true
+      } catch (error) {
+        console.error("Error creating comment:", error)
+      }
+
+      return { comment, notify, recipients }
     }
   }
 )

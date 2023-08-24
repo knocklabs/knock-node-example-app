@@ -1,10 +1,10 @@
 import { useRef } from "react"
 import { Box, Flex, Text } from "@chakra-ui/layout"
-import { useMutation, useRouter } from "blitz"
+import { useMutation } from "blitz"
 import { FiLogOut } from "react-icons/fi"
 
-import { Avatar, Button, Icon, useDisclosure } from "@chakra-ui/react"
-import { Input } from "@chakra-ui/input"
+import { Avatar, Button, Icon, IconButton, useDisclosure } from "@chakra-ui/react"
+import { SettingsIcon } from "@chakra-ui/icons"
 
 import {
   KnockFeedProvider,
@@ -23,9 +23,7 @@ type Props = {
 }
 
 const Layout: React.FC<Props> = ({ children }) => {
-  const router = useRouter()
-  const { slug } = router.query
-  const { user, refetchUser } = useCurrentUser()
+  const { user } = useCurrentUser()
   const { isOpen: isFeedOpen, onOpen: onOpenFeed, onClose: onCloseFeed } = useDisclosure()
   const {
     isOpen: isSettingsModalOpen,
@@ -41,50 +39,65 @@ const Layout: React.FC<Props> = ({ children }) => {
   }
 
   return (
-    <>
-      <Flex flexDirection="column" width="100vw" height="100vh">
-        <Flex
-          as="header"
-          alignItems="center"
-          backgroundColor="gray.50"
-          borderBottomColor="gray.200"
-          borderBottomWidth={1}
-          px={6}
-          py={3}
-        >
+    <Flex flexDirection="column" height="100%">
+      <NotificationPreferencesModal
+        user={user}
+        isOpen={isSettingsModalOpen}
+        onClose={onCloseSettingsModal}
+      />
+      <Flex
+        as="header"
+        alignItems="center"
+        justifyContent="space-between"
+        backgroundColor="gray.50"
+        borderBottomColor="gray.200"
+        borderBottomWidth={1}
+        px={6}
+        py={3}
+        height="70px"
+      >
+        <Flex alignItems="center">
           <Text
             textTransform="uppercase"
             letterSpacing={2}
             fontSize={16}
             color="blue.500"
             fontWeight={600}
+            mr={3}
           >
             Collab
           </Text>
-          <Box ml="auto">
+          <Avatar name={user.name} size="sm" />
+        </Flex>
+        <Flex alignItems="center">
+          <Box>
             <KnockFeedProvider
               apiKey={process.env.BLITZ_PUBLIC_KNOCK_CLIENT_ID!}
               feedId={process.env.BLITZ_PUBLIC_KNOCK_FEED_ID!}
               userId={`${user.id}`}
             >
-              <Box ml="auto">
+              <Box>
                 <NotificationIconButton ref={notifButtonRef} onClick={onOpenFeed} />
                 <NotificationFeedPopover
                   buttonRef={notifButtonRef}
                   isVisible={isFeedOpen}
                   onClose={onCloseFeed}
+                  placement="bottom-end"
                 />
               </Box>
             </KnockFeedProvider>
           </Box>
-          {user?.name ? (
-            <Avatar cursor="pointer" size="xs" name={user.name} onClick={onOpenSettingsModal} />
-          ) : (
-            ""
+          {user?.name && (
+            <IconButton
+              variant="ghost"
+              aria-label="settings"
+              icon={<SettingsIcon />}
+              onClick={onOpenSettingsModal}
+            />
           )}
-          {user?.name ? (
+          {user?.name && (
             <Button
-              marginLeft="2"
+              ml={2}
               size="sm"
               variant="outline"
               colorScheme="orange"
@@ -93,20 +106,13 @@ const Layout: React.FC<Props> = ({ children }) => {
             >
               Logout
             </Button>
-          ) : (
-            ""
           )}
         </Flex>
-        <Box flex={1} width="100%">
-          {children}
-        </Box>
       </Flex>
-      <NotificationPreferencesModal
-        user={user}
-        isOpen={isSettingsModalOpen}
-        onClose={onCloseSettingsModal}
-      />
-    </>
+      <Flex height="calc(100% - 70px)" width="100%">
+        {children}
+      </Flex>
+    </Flex>
   )
 }
 

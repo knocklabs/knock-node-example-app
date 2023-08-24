@@ -13,17 +13,17 @@ import {
   ModalHeader,
   ModalOverlay,
   SimpleGrid,
-  Spinner,
-  useDisclosure,
 } from "@chakra-ui/react"
 
 import { Formik, Field } from "formik"
 
 import Knock, { PreferenceSet, WorkflowPreferences } from "@knocklabs/client"
+import FallbackSpinner from "app/core/components/FallbackSpinner"
+import { NEW_ASSET, NEW_COMMENT } from "app/lib/workflows"
 
 const workflowKeyToName = {
-  "new-comment": "New comments",
-  "new-asset": "New assets",
+  [NEW_COMMENT]: "New comments",
+  [NEW_ASSET]: "New assets",
 }
 
 const NotificationPreferencesModal = ({ user, isOpen, onClose }) => {
@@ -42,24 +42,18 @@ const NotificationPreferencesModal = ({ user, isOpen, onClose }) => {
     })
   }, [knockClient])
 
-  const {
-    isOpen: isSettingsModalOpen,
-    onOpen: onOpenSettingsModal,
-    onClose: onCloseSettingsModal,
-  } = useDisclosure()
-
   if (!preferences) {
-    return <Spinner />
+    return <FallbackSpinner />
   }
 
   const preparedPreferencesWorkflows: WorkflowPreferences = {
-    "new-comment": {
+    [NEW_COMMENT]: {
       channel_types: { email: true, in_app_feed: true },
-      ...(preferences.workflows["new-comment"] as object),
+      ...(preferences.workflows[NEW_COMMENT] as object),
     },
-    "new-asset": {
+    [NEW_ASSET]: {
       channel_types: { email: true, in_app_feed: true },
-      ...(preferences.workflows["new-asset"] as object),
+      ...(preferences.workflows[NEW_ASSET] as object),
     },
   }
 
