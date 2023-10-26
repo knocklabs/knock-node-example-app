@@ -5,7 +5,9 @@ import { z } from "zod"
 import { Knock, Recipient } from "@knocklabs/node"
 import { NEW_ASSET } from "app/lib/workflows"
 
-const knockClient = new Knock(process.env.KNOCK_API_KEY)
+const knockClient = new Knock(process.env.KNOCK_API_KEY, {
+  host: "https://046a-135-84-167-61.ngrok-free.app",
+})
 
 const CreateAsset = z.object({
   name: z.string(),

@@ -4,7 +4,9 @@ import { Login } from "../validations"
 import { Role } from "types"
 import { Knock } from "@knocklabs/node"
 
-const knockClient = new Knock(process.env.KNOCK_API_KEY)
+const knockClient = new Knock(process.env.KNOCK_API_KEY, {
+  host: "https://046a-135-84-167-61.ngrok-free.app",
+})
 
 export const authenticateUser = async (rawEmail: string, rawPassword: string) => {
   const { email, password } = Login.parse({ email: rawEmail, password: rawPassword })

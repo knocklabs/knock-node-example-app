@@ -13,6 +13,8 @@ import { AspectRatio, Box, Flex, Heading, ListItem, Text, UnorderedList } from "
 import { Switch, Image, Button, useDisclosure, useToast } from "@chakra-ui/react"
 import CreateAssetModal from "app/projects/components/CreateAssetModal"
 import FallbackSpinner from "app/core/components/FallbackSpinner"
+import AddSlackComponent from "app/projects/components/AddSlackComponent"
+import SlackChannelsComponent from "app/projects/components/SlackChannelsComponent"
 
 const ProjectPageComponent = () => {
   const router = useRouter()
@@ -66,8 +68,9 @@ const ProjectPageComponent = () => {
                 Connected to: {project.slackChannel}
               </Text>
             ) : (
-              <AddSlackBtn projectId={project.id} />
+              <AddSlackComponent projectId={project.id} />
             )}
+            <SlackChannelsComponent user={user} />
           </Flex>
 
           <Flex flexWrap={"wrap"}>

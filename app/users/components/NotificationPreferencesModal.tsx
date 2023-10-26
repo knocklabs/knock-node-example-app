@@ -30,7 +30,9 @@ const NotificationPreferencesModal = ({ user, isOpen, onClose }) => {
   const [preferences, setPreferences] = useState<PreferenceSet>()
 
   const knockClient = useMemo(() => {
-    const knock = new Knock(process.env.BLITZ_PUBLIC_KNOCK_CLIENT_ID!)
+    const knock = new Knock(process.env.BLITZ_PUBLIC_KNOCK_CLIENT_ID!, {
+      host: "https://046a-135-84-167-61.ngrok-free.app",
+    })
     knock.authenticate(user.id)
 
     return knock

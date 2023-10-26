@@ -5,7 +5,9 @@ import { z } from "zod"
 import { Knock, Recipient } from "@knocklabs/node"
 import { NEW_COMMENT } from "app/lib/workflows"
 
-const knockClient = new Knock(process.env.KNOCK_API_KEY)
+const knockClient = new Knock(process.env.KNOCK_API_KEY, {
+  host: "https://046a-135-84-167-61.ngrok-free.app",
+})
 
 const CreateComment = z.object({
   text: z.string(),
@@ -78,7 +80,7 @@ export default resolver.pipe(
         .map((m) => `${m.userId}`)
 
       // Add the project as a recipient for the case we are sending Slack notifications
-      recipients.push({ id: `${project.id}`, collection: "projects" })
+      recipients.push({ id: "slack_chann_test", collection: "projects2" })
 
       // Notify recipients on Knock. This should be done asynchronously
       // (for example using background jobs, or other similar pattern).

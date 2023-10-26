@@ -5,7 +5,9 @@ import { Role } from "types"
 import { Knock } from "@knocklabs/node"
 import { NEW_ASSET, NEW_COMMENT, WELCOME } from "app/lib/workflows"
 
-const knockClient = new Knock(process.env.KNOCK_API_KEY)
+const knockClient = new Knock(process.env.KNOCK_API_KEY, {
+  host: "https://046a-135-84-167-61.ngrok-free.app",
+})
 
 export default resolver.pipe(resolver.zod(Signup), async ({ email, password, name }, ctx) => {
   const hashedPassword = await SecurePassword.hash(password.trim())
