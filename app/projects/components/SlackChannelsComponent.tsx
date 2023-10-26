@@ -29,7 +29,7 @@ const SlackChannelsComponent = ({
         tenantId,
         objectId,
         collection,
-        knockChannelId: process.env.BLITZ_PUBLIC_KNOCK_SLACK_CHANNEL_ID,
+        knockChannelId: process.env.BLITZ_PUBLIC_KNOCK_SLACK_CHANNEL_ID!,
       })
       .then((resp) => JSON.parse(resp))
       .then((res) => {
@@ -52,7 +52,7 @@ const SlackChannelsComponent = ({
         .map((channel) => {
           return {
             channel_id: channel.id,
-            access_token: process.env.BLITZ_PUBLIC_TENANT_ACCESS_TOKEN_TEMP,
+            access_token: process.env.BLITZ_PUBLIC_TENANT_ACCESS_TOKEN_TEMP!,
           }
         })
 
