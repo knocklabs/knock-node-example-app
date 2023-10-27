@@ -14,6 +14,7 @@ const SlackChannelsComponent = ({
   collection = "projects2",
 }) => {
   const [channels, setChannels] = useState<SlackChannel[]>([])
+  const [loading, setLoading] = useState(false)
   const knockClient = useMemo(() => {
     const knock = new Knock(process.env.BLITZ_PUBLIC_KNOCK_CLIENT_ID!, {
       host: "https://046a-135-84-167-61.ngrok-free.app",
@@ -24,6 +25,7 @@ const SlackChannelsComponent = ({
   }, [user.id, user.access_token])
 
   const getChannels = useCallback(() => {
+    setLoading(true)
     knockClient.slack
       .getChannels({
         tenantId,
@@ -36,6 +38,7 @@ const SlackChannelsComponent = ({
         console.log("result channels", res)
 
         setChannels(res)
+        setLoading(false)
       })
   }, [collection, knockClient.slack, objectId, tenantId])
 
@@ -66,13 +69,11 @@ const SlackChannelsComponent = ({
           userId: user.id,
         })
         .then((res) => {
-          console.log("result channels", res)
+          console.log("set result channels", res)
         })
       // .then((resp) => JSON.parse(resp))
     }
   }
-
-  console.log("CHANNELS SET RESULT", channels)
 
   return (
     <div
@@ -93,45 +94,55 @@ const SlackChannelsComponent = ({
             background: "orange",
             padding: "4px",
             cursor: "pointer",
+            marginTop: "4px",
+            marginBottom: "8px",
           }}
         >
           Get channels
         </button>
-        {channels.map((channel) => {
-          return (
-            <div
-              className="flex-row"
-              key={channel["id"]}
-              style={{
-                display: "flex",
-                alignItems: "center",
-                marginBottom: "10px",
-              }}
-            >
-              <div className="flex-item" style={{ width: "80px" }}>
-                <label htmlFor={channel["id"]}>
-                  {channel["name"]} - {channel["id"]}
-                </label>
-              </div>
+        {loading ? (
+          <div>
+            <text>Loading channels...</text>
+          </div>
+        ) : (
+          channels.map((channel) => {
+            return (
               <div
-                className="flex-item"
+                className="flex-row"
+                key={channel["id"]}
                 style={{
                   display: "flex",
-                  justifyContent: "center",
+                  alignItems: "center",
+                  marginBottom: "10px",
+                  padding: "4px",
+                  borderBottomWidth: "2px",
+                  borderLeftWidth: "2px",
+                  borderRightWidth: "2px",
                 }}
               >
-                <input
-                  type="checkbox"
-                  id={channel.id}
-                  name={channel.name}
-                  value={channel.name}
-                  checked={channel.connected}
-                  onChange={() => handleCheckboxChange(channel.id)}
-                />
+                <div className="flex-item" style={{ width: "80px" }}>
+                  <label htmlFor={channel["id"]}>{channel["name"]}</label>
+                </div>
+                <div
+                  className="flex-item"
+                  style={{
+                    display: "flex",
+                    justifyContent: "center",
+                  }}
+                >
+                  <input
+                    type="checkbox"
+                    id={channel.id}
+                    name={channel.name}
+                    value={channel.name}
+                    checked={channel.connected}
+                    onChange={() => handleCheckboxChange(channel.id)}
+                  />
+                </div>
               </div>
-            </div>
-          )
-        })}
+            )
+          })
+        )}
       </div>
     </div>
   )

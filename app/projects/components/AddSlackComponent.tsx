@@ -2,8 +2,8 @@ const SLACK_AUTHORIZE_URL = "https://slack.com/oauth/v2/authorize"
 
 const AddSlackComponent = ({ projectId, tenantId = "tenant12345" }) => {
   const params = new URLSearchParams({
-    // redirect_uri: process.env.BLITZ_PUBLIC_SLACK_REDIRECT_URI,
     state: JSON.stringify({
+      redirectUrl: "localhost:3001/ingen/1",
       projectId,
       tenantId,
       channelId: process.env.BLITZ_PUBLIC_KNOCK_SLACK_CHANNEL_ID,

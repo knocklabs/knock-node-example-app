@@ -49,7 +49,7 @@ const ProjectPageComponent = () => {
 
   return (
     <Layout>
-      <Flex flex={1} height="100%">
+      <Flex flex={1} height="100%" width="100%" alignContent="space-between">
         <CreateAssetModal
           isOpen={isOpen}
           onClose={onClose}
@@ -57,23 +57,16 @@ const ProjectPageComponent = () => {
           slug={slug}
           project={project}
         />
-        <Box p={6} width="calc(100% - 400px)" position="relative">
-          <Flex alignItems="center" mb={6}>
-            <Heading size="lg">{project.name}</Heading>
-            <Button ml={4} onClick={onOpen}>
-              Create asset
-            </Button>
-            {project.slackChannel ? (
-              <Text ml="auto" fontWeight="bold">
-                Connected to: {project.slackChannel}
-              </Text>
-            ) : (
-              <AddSlackComponent projectId={project.id} />
-            )}
-            <SlackChannelsComponent user={user} />
+        <Flex direction="column" flexGrow={1} width="100%">
+          <Flex alignContent="space-between" alignItems="baseline" width="100%">
+            <Flex alignItems="center" p={6} flexGrow={1}>
+              <Heading size="lg">{project.name}</Heading>
+              <Button ml={4} onClick={onOpen}>
+                Create asset
+              </Button>
+            </Flex>
           </Flex>
-
-          <Flex flexWrap={"wrap"}>
+          <Flex flexWrap="wrap" mt={4}>
             {project.assets?.map((asset) => (
               <Box
                 key={asset.id}
@@ -101,7 +94,19 @@ const ProjectPageComponent = () => {
               </Box>
             ))}
           </Flex>
-        </Box>
+        </Flex>
+        <Flex direction="column" p={6}>
+          <Flex mb={4}>
+            {project.slackChannel ? (
+              <Text ml="auto" fontWeight="bold">
+                Connected to: {project.slackChannel}
+              </Text>
+            ) : (
+              <AddSlackComponent projectId={project.id} />
+            )}
+          </Flex>
+          <SlackChannelsComponent user={user} />
+        </Flex>
         <Flex
           width="400px"
           flexDir="column"
