@@ -40,11 +40,11 @@ const Layout: React.FC<Props> = ({ children }) => {
 
   return (
     <Flex flexDirection="column" height="100%">
-      <NotificationPreferencesModal
+      {/* <NotificationPreferencesModal
         user={user}
         isOpen={isSettingsModalOpen}
         onClose={onCloseSettingsModal}
-      />
+      /> */}
       <Flex
         as="header"
         alignItems="center"
