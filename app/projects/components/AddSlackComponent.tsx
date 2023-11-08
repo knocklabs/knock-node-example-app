@@ -7,6 +7,8 @@ const AddSlackComponent = ({ projectId, tenantId = "tenant12345" }) => {
       projectId,
       tenantId,
       channelId: process.env.BLITZ_PUBLIC_KNOCK_SLACK_CHANNEL_ID,
+      publicKey: process.env.BLITZ_PUBLIC_KNOCK_CLIENT_ID,
+      userToken: process.env.BLITZ_PUBLIC_USER_TOKEN,
     }),
     client_id: process.env.BLITZ_PUBLIC_SLACK_CLIENT_ID,
     scope: "chat:write,chat:write.public,channels:read",
