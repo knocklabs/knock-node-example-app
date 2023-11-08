@@ -46,14 +46,17 @@ const NotificationPreferencesModal = ({ user, isOpen, onClose }) => {
     return <FallbackSpinner />
   }
 
+  const newCommentWorkflow = (preferences.workflows && preferences.workflows[NEW_COMMENT]) || {}
+  const newAssetWorkflow = (preferences.workflows && preferences.workflows[NEW_ASSET]) || {}
+
   const preparedPreferencesWorkflows: WorkflowPreferences = {
     [NEW_COMMENT]: {
       channel_types: { email: true, in_app_feed: true },
-      ...(preferences.workflows[NEW_COMMENT] as object),
+      ...(newCommentWorkflow as object),
     },
     [NEW_ASSET]: {
       channel_types: { email: true, in_app_feed: true },
-      ...(preferences.workflows[NEW_ASSET] as object),
+      ...(newAssetWorkflow as object),
     },
   }
 
