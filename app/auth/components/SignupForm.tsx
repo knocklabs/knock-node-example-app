@@ -15,17 +15,7 @@ type SignupFormProps = {
 export const SignupForm = (props: SignupFormProps) => {
   const toast = useToast()
 
-  const [signupMutation] = useMutation(signup, {
-    onSuccess: (result) => {
-      if (result && !result?.notify?.success) {
-        toast({
-          status: "error",
-          title: "Notification failed",
-          description: `Make sure you have welcome, new-comment, and new-asset workflows in Knock.`,
-        })
-      }
-    },
-  })
+  const [signupMutation] = useMutation(signup)
 
   return (
     <Center height="100vh">

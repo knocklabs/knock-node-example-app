@@ -1,6 +1,6 @@
 # **Knock + Node.js example app**
 
-This example app uses [Knock](https://knock.app) to power cross channel notifications via email, an in-app feed, and Slack inside of a full-stack Node application, written in [Blitz.js](https://blitzjs.com/). It uses the [Knock Node SDK](https://github.com/knocklabs/knock-node) and [React in-app feed components](https://github.com/knocklabs/react-notification-feed).
+This example app uses [Knock](https://knock.app) to power cross channel notifications via email and an in-app feed inside of a full-stack Node application, written in [Blitz.js](https://blitzjs.com/). It uses the [Knock Node SDK](https://github.com/knocklabs/knock-node) and [React in-app feed components](https://github.com/knocklabs/react-notification-feed).
 
 You can read more about this example app [in the Knock documentation](https://docs.knock.app/getting-started/example-app#nodejs-example-app).
 
@@ -90,35 +90,24 @@ This will start your application at http://localhost:3000. You can log in with t
 
 You can take a look at the users credentials in the seed file in order to log in as a different account; all passwords are `password`.
 
-## Next steps
+### Practice implementing the Knock on this branch
 
-This example app showcases a few features you can use with Knock. You'll want to explore:
+This branch of the Knock example app doesn't have Knock added yet. Throughout the files, you'll see the logical spaces to add calls marked with the comment `TODO: ADD KNOCK`. When added, this application will be able to do the following:
 
-1. Triggering workflows when a user adds a comment
-2. Adjusting user preferences
-3. Using the notification feed
-4. Integrating Slack or Segment
+1. [Identify users on Knock](https://docs.knock.app/managing-recipients/identifying-recipients)
+2. [Trigger workflows on Knock](https://docs.knock.app/send-notifications/triggering-workflows)
+3. [Inline identify users](https://docs.knock.app/reference#trigger-workflow-inline-identify)
+4. [Set user preferences on Knock](https://docs.knock.app/managing-recipients/setting-preferences)
+5. [Render a notification feed](https://docs.knock.app/in-app-ui/react/feed)
 
-### Slack notifications
+### Recommended order of steps
 
-In order for Slack notifications to work, you will need to expose an endpoint that Slack can access
-as part of the OAuth workflow. An easy way of doing this is installing [ngrok](https://ngrok.com/) and creating a public tunnel
-to your local web server.
+Setup: make sure you go through the steps in `Using the example app` above to make sure you have a Knock account with the required workflows and you have your environment variables available here.
 
-### Segment integration
-
-In order to send events to Segment, you'll need to the the write key from [a source you create](https://segment.com/docs/connections/sources/#create-a-source) in Segment and set it in your `.env` file as the `BLITZ_PUBLIC_SEGMENT_WRITE_KEY`, as well as setting `ENABLE_SEGMENT` to `true`. Check out the `app/lib/analytics.tsx` file to see how you can use [track, page and identify](https://segment.com/docs/connections/sources/catalog/libraries/website/javascript/#basic-tracking-methods) events throughout your code to send events from this app to Segment.
-
-## Connect with us
-
-❤️ **Knock community Slack**
-
-Join the community, ask questions, and request new features in the [Slack community](https://knockcustomers.slack.com/).
-
-🤲 **Knock support**
-
-Email us at [support@knock.app](mailto:support@knock.app).
-
-## Practice adding Knock
-
-If you want to use this application to follow along adding Knock to an existing application, you can switch to the `sans-knock` branch which has a limited set of features and does not include a Knock integration yet. Follow the instructions in the README to see how to add Knock from scratch.
+1. Identify users as they log in
+2. Trigger the following workflows and inline-identify the recipients:
+   - `welcome` workflow for new users who sign up (`/signup.ts`)
+   - `new-asset` workflow when an asset is added (`/createAsset.ts`)
+   - `new-comment` workflow when a comment is added (`/createComment.ts`)
+3. Let users set preferences for their notifications
+4. Add the notification feed

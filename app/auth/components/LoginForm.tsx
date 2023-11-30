@@ -7,7 +7,6 @@ import { Box, Flex, Heading, Link, Text } from "@chakra-ui/layout"
 import { Input } from "@chakra-ui/input"
 import { Field } from "formik"
 import { Center } from "@chakra-ui/react"
-import * as analytics from "app/lib/analytics"
 
 type LoginFormProps = {
   onSuccess?: (user: PromiseReturnType<typeof login>) => void
@@ -37,9 +36,6 @@ export const LoginForm = (props: LoginFormProps) => {
             onSubmit={async (values) => {
               try {
                 const user = await loginMutation(values)
-                if (analytics.ENABLE_SEGMENT) {
-                  analytics.identify(user)
-                }
                 props.onSuccess?.(user)
               } catch (error: any) {
                 if (error instanceof AuthenticationError) {

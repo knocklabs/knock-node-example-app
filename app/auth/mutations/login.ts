@@ -2,9 +2,6 @@ import { resolver, SecurePassword, AuthenticationError } from "blitz"
 import db from "db"
 import { Login } from "../validations"
 import { Role } from "types"
-import { Knock } from "@knocklabs/node"
-
-const knockClient = new Knock(process.env.KNOCK_API_KEY)
 
 export const authenticateUser = async (rawEmail: string, rawPassword: string) => {
   const { email, password } = Login.parse({ email: rawEmail, password: rawPassword })
@@ -23,9 +20,11 @@ export const authenticateUser = async (rawEmail: string, rawPassword: string) =>
 
   const { hashedPassword, ...rest } = user
 
-  // Identify the user - this should have happened in the seed file already but we're doing it
-  // here in case of changes to the environment/API key
-  await knockClient.users.identify(`${user.id}`, { email: user.email, name: user.name })
+  /*
+  TODO: ADD KNOCK - IDENTIFY
+
+  Add a call to identify the user when they log in
+  */
 
   return rest
 }

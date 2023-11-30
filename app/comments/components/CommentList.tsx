@@ -7,7 +7,6 @@ import { useRef, useState, useEffect } from "react"
 
 import { useCurrentUser } from "app/core/hooks/useCurrentUser"
 import createComment from "app/comments/mutations/createComment"
-import * as analytics from "app/lib/analytics"
 import { useToast } from "@chakra-ui/react"
 
 const CommentList = ({ asset, project, slug, refetch }) => {
@@ -18,24 +17,6 @@ const CommentList = ({ asset, project, slug, refetch }) => {
 
   const [createCommentMutation] = useMutation(createComment, {
     onSuccess: (result) => {
-      if (analytics.ENABLE_SEGMENT) {
-        analytics.track("new-comment", {
-          comment: {
-            body: result?.comment.text,
-            page_name: asset.name,
-          },
-          recipients: result?.recipients,
-        })
-      }
-
-      if (!result?.notify?.success) {
-        toast({
-          status: "error",
-          title: "Notification failed",
-          description: `Make sure you have a workflow called ${result?.notify?.workflow} in Knock.`,
-        })
-      }
-
       refetch()
     },
   })
