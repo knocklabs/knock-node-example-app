@@ -1,18 +1,9 @@
-import { useRef } from "react"
 import { Box, Flex, Text } from "@chakra-ui/layout"
 import { useMutation } from "blitz"
 import { FiLogOut } from "react-icons/fi"
 
 import { Avatar, Button, Icon, IconButton, useDisclosure } from "@chakra-ui/react"
 import { SettingsIcon } from "@chakra-ui/icons"
-
-import {
-  KnockFeedProvider,
-  NotificationIconButton,
-  NotificationFeedPopover,
-} from "@knocklabs/react-notification-feed"
-
-import "@knocklabs/react-notification-feed/dist/index.css"
 
 import { useCurrentUser } from "app/core/hooks/useCurrentUser"
 import NotificationPreferencesModal from "app/users/components/NotificationPreferencesModal"
@@ -24,15 +15,21 @@ type Props = {
 
 const Layout: React.FC<Props> = ({ children }) => {
   const { user } = useCurrentUser()
-  const { isOpen: isFeedOpen, onOpen: onOpenFeed, onClose: onCloseFeed } = useDisclosure()
+  /*
+  TODO: ADD KNOCK - NOTIFICATION FEED
+
+  Uncomment to use the following when adding the Knock React Notification feed into the component
+  */
+
+  // const { isOpen: isFeedOpen, onOpen: onOpenFeed, onClose: onCloseFeed } = useDisclosure()
+  // const notifButtonRef = useRef(null)
+
   const {
     isOpen: isSettingsModalOpen,
     onOpen: onOpenSettingsModal,
     onClose: onCloseSettingsModal,
   } = useDisclosure()
   const [logoutMutation] = useMutation(logout)
-
-  const notifButtonRef = useRef(null)
 
   if (!user) {
     return null
@@ -71,21 +68,11 @@ const Layout: React.FC<Props> = ({ children }) => {
         </Flex>
         <Flex alignItems="center">
           <Box>
-            <KnockFeedProvider
-              apiKey={process.env.BLITZ_PUBLIC_KNOCK_CLIENT_ID!}
-              feedId={process.env.BLITZ_PUBLIC_KNOCK_FEED_ID!}
-              userId={`${user.id}`}
-            >
-              <Box>
-                <NotificationIconButton ref={notifButtonRef} onClick={onOpenFeed} />
-                <NotificationFeedPopover
-                  buttonRef={notifButtonRef}
-                  isVisible={isFeedOpen}
-                  onClose={onCloseFeed}
-                  placement="bottom-end"
-                />
-              </Box>
-            </KnockFeedProvider>
+            {/*
+             TODO: ADD KNOCK - NOTIFICATION FEED
+
+             Add the KnockFeedProvider here.
+             */}
           </Box>
           {user?.name && (
             <IconButton

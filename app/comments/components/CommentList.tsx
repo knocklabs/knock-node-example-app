@@ -28,14 +28,6 @@ const CommentList = ({ asset, project, slug, refetch }) => {
         })
       }
 
-      if (!result?.notify?.success) {
-        toast({
-          status: "error",
-          title: "Notification failed",
-          description: `Make sure you have a workflow called ${result?.notify?.workflow} in Knock.`,
-        })
-      }
-
       refetch()
     },
   })

@@ -2,11 +2,6 @@ import { resolver, Ctx } from "blitz"
 import db from "db"
 import { z } from "zod"
 
-import { Knock, Recipient } from "@knocklabs/node"
-import { NEW_COMMENT } from "app/lib/workflows"
-
-const knockClient = new Knock(process.env.KNOCK_API_KEY)
-
 const CreateComment = z.object({
   text: z.string(),
   assetId: z.number(),
@@ -73,39 +68,21 @@ export default resolver.pipe(
       })
 
       // Get all project members from the project except for the author of the comment
-      const recipients: Recipient[] = project.members
+      const recipients = project.members
         .filter((m) => m.userId !== userId)
         .map((m) => `${m.userId}`)
 
       // Add the project as a recipient for the case we are sending Slack notifications
+      // @ts-ignore (remove when adding Knock type)
       recipients.push({ id: `${project.id}`, collection: "projects" })
 
-      // Notify recipients on Knock. This should be done asynchronously
-      // (for example using background jobs, or other similar pattern).
-      const notify = {
-        workflow: NEW_COMMENT,
-        success: false,
-      }
+      /*
+      TODO: ADD KNOCK - NOTIFY
 
-      try {
-        await knockClient.notify(NEW_COMMENT, {
-          actor: `${userId}`,
-          recipients,
-          data: {
-            comment_content: comment.text,
-            asset_name: asset.name,
-            asset_url: asset.url,
-            project_name: project.name,
-            projectId: project.id,
-          },
-        })
+      Trigger the "new-comment" workflow in knock with the recipients and necessary data
+      */
 
-        notify.success = true
-      } catch (error) {
-        console.error("Error creating comment:", error)
-      }
-
-      return { comment, notify, recipients }
+      return { comment, recipients }
     }
   }
 )

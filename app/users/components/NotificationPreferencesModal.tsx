@@ -1,4 +1,4 @@
-import { useMemo, useEffect, useState } from "react"
+import { useState } from "react"
 
 import { Box, Text } from "@chakra-ui/layout"
 import {
@@ -16,9 +16,6 @@ import {
 } from "@chakra-ui/react"
 
 import { Formik, Field } from "formik"
-
-import Knock, { PreferenceSet, WorkflowPreferences } from "@knocklabs/client"
-import FallbackSpinner from "app/core/components/FallbackSpinner"
 import { NEW_ASSET, NEW_COMMENT } from "app/lib/workflows"
 
 const workflowKeyToName = {
@@ -27,29 +24,20 @@ const workflowKeyToName = {
 }
 
 const NotificationPreferencesModal = ({ user, isOpen, onClose }) => {
-  const [preferences, setPreferences] = useState<PreferenceSet>()
+  const [preferences, setPreferences] = useState({})
 
-  const knockClient = useMemo(() => {
-    const knock = new Knock(process.env.BLITZ_PUBLIC_KNOCK_CLIENT_ID!)
-    knock.authenticate(user.id)
+  /*
+  TODO: ADD KNOCK - PREFERENCES
 
-    return knock
-  }, [user.id])
+  Use the knock client to get the user's preferences, then set those preferences in state
+  */
 
-  useEffect(() => {
-    knockClient.preferences.get().then((preferences) => {
-      setPreferences(preferences)
-    })
-  }, [knockClient])
+  // @ts-ignore (remove when adding Knock type)
+  const newCommentWorkflow = (preferences?.workflows && preferences?.workflows[NEW_COMMENT]) || {}
+  // @ts-ignore (remove when adding Knock type)
+  const newAssetWorkflow = (preferences?.workflows && preferences?.workflows[NEW_ASSET]) || {}
 
-  if (!preferences) {
-    return <FallbackSpinner />
-  }
-
-  const newCommentWorkflow = (preferences.workflows && preferences.workflows[NEW_COMMENT]) || {}
-  const newAssetWorkflow = (preferences.workflows && preferences.workflows[NEW_ASSET]) || {}
-
-  const preparedPreferencesWorkflows: WorkflowPreferences = {
+  const preparedPreferencesWorkflows = {
     [NEW_COMMENT]: {
       channel_types: { email: true, in_app_feed: true },
       ...(newCommentWorkflow as object),
@@ -84,9 +72,14 @@ const NotificationPreferencesModal = ({ user, isOpen, onClose }) => {
             <Formik
               initialValues={preparedPreferencesWorkflows}
               onSubmit={async (values) => {
-                let updatedPreferences = { ...preferences, workflows: values }
-                updatedPreferences = await knockClient.preferences.set(updatedPreferences)
-                setPreferences(updatedPreferences)
+                /*
+                TODO: ADD KNOCK - PREFERENCES
+
+                Uncomment the following, then make a Knock call to set the user's preferences with the updated preferences and set them in state
+                */
+
+                // let updatedPreferences = { ...preferences, workflows: values }
+
                 onClose()
               }}
             >

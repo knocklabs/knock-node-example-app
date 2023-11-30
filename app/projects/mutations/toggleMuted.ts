@@ -2,10 +2,6 @@ import { resolver, Ctx, AuthenticationError } from "blitz"
 import db from "db"
 import { z } from "zod"
 
-import { Knock } from "@knocklabs/node"
-
-const knockClient = new Knock(process.env.KNOCK_API_KEY)
-
 const ToggleMuted = z.object({
   projectId: z.number(),
 })
@@ -51,10 +47,11 @@ export default resolver.pipe(
           .filter((pm) => pm.muted)
           .map((pm) => pm.projectId)
 
-        // store the muted projects as a variable within Knock's user
-        await knockClient.users.identify(`${userId}`, {
-          muted_projects: mutedProjectIds,
-        })
+        /*
+        TODO: ADD KNOCK - IDENTIFY
+
+        store the muted projects as a variable within Knock's user by calling `identify` with these project IDs
+        */
       }
 
       return {}

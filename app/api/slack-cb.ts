@@ -2,9 +2,6 @@ import { BlitzApiRequest, BlitzApiResponse, NotFoundError } from "blitz"
 import db from "db"
 import axios from "axios"
 import { URLSearchParams } from "url"
-import { Knock } from "@knocklabs/node"
-
-const knockClient = new Knock(process.env.KNOCK_API_KEY)
 
 const SLACK_ACCESS_ENDPOINT = "https://slack.com/api/oauth.v2.access"
 
@@ -45,29 +42,14 @@ const handler = async (req: BlitzApiRequest, res: BlitzApiResponse) => {
         },
       })
 
-      // After the user has selected which channel in Slack the project will be connected to, we set
-      // it as an object on Knock's side
-      await knockClient.objects.set("projects", `${project.id}`, {
-        name: project.name,
-      })
+      /*
+      TODO: ADD KNOCK - SET OBJECT; SET CHANNEL DATA
 
-      // Once the the object is present on Knock we set the incoming webhook url on its channel
-      // data for the Slack channel in Knock.
-      // Now that the project is mapped to an object in Knock we can trigger workflows and add it
-      // as a recipient. When the workflow reaches a Slack step and the object is a recipient, Knock
-      // will use the object's channel data to send the notification to the connected Slack channel.
-      await knockClient.objects.setChannelData(
-        "projects",
-        `${project.id}`,
-        process.env.KNOCK_SLACK_CHANNEL_ID!,
-        {
-          connections: [
-            {
-              incoming_webhook: { url },
-            },
-          ],
-        }
-      )
+      After the user has selected which channel in Slack the project will be connected to, we
+      need to:
+      1. set it as an object on Knock's side
+      2. set channel data for the object (the incoming webhook url)
+      */
 
       res.redirect(`/${project.workspace.slug}/${projectId}`).end()
     } else {
