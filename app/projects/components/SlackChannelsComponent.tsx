@@ -17,7 +17,7 @@ const SlackChannelsComponent = ({
   const [loading, setLoading] = useState(false)
   const knockClient = useMemo(() => {
     const knock = new Knock(process.env.BLITZ_PUBLIC_KNOCK_CLIENT_ID!, {
-      host: "https://046a-135-84-167-61.ngrok-free.app",
+      host: process.env.BLITZ_PUBLIC_KNOCK_API_URL,
     })
     knock.authenticate(user.id, user.access_token)
 

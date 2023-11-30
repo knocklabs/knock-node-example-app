@@ -5,7 +5,7 @@ import { Knock } from "@knocklabs/node"
 import { NEW_ASSET, NEW_COMMENT } from "app/lib/workflows"
 
 const knockClient = new Knock(process.env.KNOCK_API_KEY, {
-  host: "https://046a-135-84-167-61.ngrok-free.app",
+  host: process.env.KNOCK_API_URL,
 })
 
 const seed = async () => {

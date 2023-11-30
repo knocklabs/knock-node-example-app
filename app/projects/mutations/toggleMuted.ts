@@ -5,7 +5,7 @@ import { z } from "zod"
 import { Knock } from "@knocklabs/node"
 
 const knockClient = new Knock(process.env.KNOCK_API_KEY, {
-  host: "https://046a-135-84-167-61.ngrok-free.app",
+  host: process.env.KNOCK_API_URL,
 })
 
 const ToggleMuted = z.object({
