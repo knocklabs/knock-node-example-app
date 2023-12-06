@@ -32,7 +32,7 @@ export default resolver.pipe(resolver.zod(Signup), async ({ email, password, nam
     /*
     TODO: ADD KNOCK - IDENTIFY; NOTIFY
 
-    1. Identify user on Knock so we the data is accessible when triggering workflows
+    1. Identify user on Knock so the data is accessible when triggering workflows
     2. Trigger the "welcome" workflow
     */
 
