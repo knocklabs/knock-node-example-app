@@ -77,11 +77,11 @@ In order to send events to Segment, you'll need to the the write key from [a sou
 
 This branch of the Knock example app doesn't have Knock added yet. Throughout the files, you'll see the logical spaces to add calls marked with the comment `TODO: ADD KNOCK`. When added, this application will be able to do the following:
 
-1. Identify users on Knock
-2. Trigger workflows on Knock
-3. Set user preferences on Knock
-4. Render a notification feed
-5. Set a recipient object with channel data to use Slack notifications
+1. [Identify users on Knock](https://docs.knock.app/managing-recipients/identifying-recipients)
+2. [Trigger workflows on Knock](https://docs.knock.app/send-notifications/triggering-workflows)
+3. [Set user preferences on Knock](https://docs.knock.app/managing-recipients/setting-preferences)
+4. [Render a notification feed](https://docs.knock.app/in-app-ui/react/feed)
+5. [Use Slack notifications](https://docs.knock.app/integrations/chat/slack/overview)
 
 ### Recommended order of steps
 
