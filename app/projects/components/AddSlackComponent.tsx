@@ -1,18 +1,20 @@
 const SLACK_AUTHORIZE_URL = "https://slack.com/oauth/v2/authorize"
 
 const AddSlackComponent = ({ projectId, tenantId = "tenant12345" }) => {
-  const params = new URLSearchParams({
+  const params1 = {
     state: JSON.stringify({
-      redirectUrl: "http://localhost:3001/ingen/1",
-      projectId,
-      tenantId,
-      channelId: process.env.BLITZ_PUBLIC_KNOCK_SLACK_CHANNEL_ID,
-      publicKey: process.env.BLITZ_PUBLIC_KNOCK_CLIENT_ID,
-      userToken: process.env.BLITZ_PUBLIC_USER_TOKEN,
+      redirect_url: "http://localhost:3001/ingen/1",
+      project_id: projectId,
+      tenant_id: tenantId,
+      channel_id: process.env.BLITZ_PUBLIC_KNOCK_SLACK_CHANNEL_ID,
+      public_key: process.env.BLITZ_PUBLIC_KNOCK_CLIENT_ID,
+      user_token: process.env.BLITZ_PUBLIC_USER_TOKEN,
     }),
     client_id: process.env.BLITZ_PUBLIC_SLACK_CLIENT_ID,
     scope: "chat:write,chat:write.public,channels:read",
-  } as Record<string, string>)
+  } as Record<string, string>
+  console.log(params1)
+  const params = new URLSearchParams(params1)
 
   // Generated with https://api.slack.com/docs/slack-button
   const linkStyles = {
