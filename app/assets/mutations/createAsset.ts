@@ -62,10 +62,6 @@ export default resolver.pipe(
       .filter((m) => m.userId !== userId)
       .map((m) => `${m.userId}`)
 
-    // Add the project as a recipient for the case we are sending Slack notifications
-    // @ts-ignore (remove when adding Knock type)
-    recipients.push({ id: `${projectId}`, collection: "projects" })
-
     const notify = { success: false, workflow: NEW_ASSET }
 
     /*

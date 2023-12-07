@@ -24,14 +24,6 @@
       "type": "channel"
     },
     {
-      "channel_key": "collab-io-slack-bot",
-      "ref": "chat_1",
-      "template": {
-        "markdown_body@": "chat_1/markdown_body.md"
-      },
-      "type": "channel"
-    },
-    {
       "ref": "delay_1",
       "settings": {
         "delay_for": {

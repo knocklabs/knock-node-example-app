@@ -2,9 +2,7 @@ import { BlitzPage, useRouter, useParam, useQuery, useMutation, Link, Routes } f
 import { Suspense } from "react"
 
 import Layout from "app/core/components/Layout"
-import AddSlackBtn from "app/projects/components/AddSlackBtn"
 import getProject from "app/projects/queries/getProject"
-import toggleMuted from "app/projects/mutations/toggleMuted"
 import createAsset from "app/assets/mutations/createAsset"
 import { useCurrentUser } from "app/core/hooks/useCurrentUser"
 
@@ -36,7 +34,6 @@ const ProjectPageComponent = () => {
       refetch()
     },
   })
-  const [toggleMutedMutation] = useMutation(toggleMuted)
 
   if (!slug || !project || !user) {
     router.push("/")
@@ -61,13 +58,6 @@ const ProjectPageComponent = () => {
             <Button ml={4} onClick={onOpen}>
               Create asset
             </Button>
-            {project.slackChannel ? (
-              <Text ml="auto" fontWeight="bold">
-                Connected to: {project.slackChannel}
-              </Text>
-            ) : (
-              <AddSlackBtn projectId={project.id} />
-            )}
           </Flex>
 
           <Flex flexWrap={"wrap"}>
@@ -106,23 +96,6 @@ const ProjectPageComponent = () => {
           borderLeftColor="gray.200"
           height="100%"
         >
-          <Box p={4}>
-            <Heading size="xs" mb={4}>
-              Preferences
-            </Heading>
-            <Flex>
-              <Switch
-                id="email-alerts"
-                size="lg"
-                isChecked={userProjectMembership?.muted}
-                onChange={async () => {
-                  await toggleMutedMutation({ projectId: project.id })
-                  await refetch()
-                }}
-              />
-              <Text ml={3}>Muted</Text>
-            </Flex>
-          </Box>
           <Box borderBottomColor="gray.200" borderBottomWidth={1} p={4}>
             <Heading size="xs" fontWeight="regular" mt={3} mb={4}>
               {project.members?.length} Project members

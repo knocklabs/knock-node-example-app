@@ -1,6 +1,6 @@
 # **Knock + Node.js example app**
 
-This example app uses [Knock](https://knock.app) to power cross channel notifications via email, an in-app feed, and Slack inside of a full-stack Node application, written in [Blitz.js](https://blitzjs.com/). It uses the [Knock Node SDK](https://github.com/knocklabs/knock-node) and [React in-app feed components](https://github.com/knocklabs/react-notification-feed).
+This example app uses [Knock](https://knock.app) to power cross channel notifications via email and an in-app feed inside of a full-stack Node application, written in [Blitz.js](https://blitzjs.com/). It uses the [Knock Node SDK](https://github.com/knocklabs/knock-node) and [React in-app feed components](https://github.com/knocklabs/react-notification-feed).
 
 You can read more about this example app [in the Knock documentation](https://docs.knock.app/getting-started/example-app).
 
@@ -38,7 +38,6 @@ Here's more context on where to find the Knock variables:
 
 - [Knock API keys](https://docs.knock.app/developer-tools/api-keys)
 - [Knock in-app feed channel ID](https://docs.knock.app/in-app-ui/react/feed#getting-started)
-- [Knock Slack channel ID](https://docs.knock.app/integrations/chat/slack/building-oauth-flow#how-to-set-slack-channel-data-in-knock)
 
 ## Using the example app
 
@@ -61,16 +60,6 @@ Once you've seeded your Knock account with `yarn blitz db seed` and created the 
 
 **🚀 Tip: auto-create workflows with the CLI 🚀** <br> The example app repo contains a `knock/workflows` directory with the three workflows listed above. You can use the [Knock CLI](https://docs.knock.app/cli) to push these workflows into your Knock account using the `knock workflow push --all` command.
 
-## Slack notifications
-
-In order for Slack notifications to work, you will need to expose an endpoint that Slack can access
-as part of the OAuth workflow. An easy way of doing this is installing [ngrok](https://ngrok.com/) and creating a public tunnel
-to your local web server.
-
-## Segment integration
-
-In order to send events to Segment, you'll need to the the write key from [a source you create](https://segment.com/docs/connections/sources/#create-a-source) in Segment and set it in your `.env` file as the `BLITZ_PUBLIC_SEGMENT_WRITE_KEY`, as well as setting `ENABLE_SEGMENT` to `true`. Check out the `app/lib/analytics.tsx` file to see how you can use [track, page and identify](https://segment.com/docs/connections/sources/catalog/libraries/website/javascript/#basic-tracking-methods) events throughout your code to send events from this app to Segment.
-
 ## TODO: Add Knock
 
 ### Practice implementing the Knock on this branch
@@ -81,7 +70,6 @@ This branch of the Knock example app doesn't have Knock added yet. Throughout th
 2. [Trigger workflows on Knock](https://docs.knock.app/send-notifications/triggering-workflows)
 3. [Set user preferences on Knock](https://docs.knock.app/managing-recipients/setting-preferences)
 4. [Render a notification feed](https://docs.knock.app/in-app-ui/react/feed)
-5. [Use Slack notifications](https://docs.knock.app/integrations/chat/slack/overview)
 
 ### Recommended order of steps
 
@@ -93,4 +81,3 @@ Setup: make sure you go through the steps in `Using the example app` above to ma
    - `new-comment` workflow when a comment is added (`/createComment.ts`)
 2. Let users set preferences for their notifications
 3. Add the notification feed
-4. Add Slack notifications
