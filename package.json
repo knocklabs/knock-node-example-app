@@ -23,6 +23,9 @@
       "eslint --fix"
     ]
   },
+  "engines": {
+    "node": "16.0.0"
+  },
   "dependencies": {
     "@chakra-ui/icons": "2.1.0",
     "@chakra-ui/react": "1.8.8",
