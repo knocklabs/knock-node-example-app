@@ -33,11 +33,10 @@ const SlackChannelsComponent = ({
         collection,
         knockChannelId: process.env.BLITZ_PUBLIC_KNOCK_SLACK_CHANNEL_ID!,
       })
-      .then((resp) => JSON.parse(resp))
       .then((res) => {
-        console.log("result channels", res)
+        const { channels } = res
 
-        setChannels(res)
+        setChannels(channels)
         setLoading(false)
       })
   }, [collection, knockClient.slack, objectId, tenantId])
@@ -71,7 +70,6 @@ const SlackChannelsComponent = ({
         .then((res) => {
           console.log("set result channels", res)
         })
-      // .then((resp) => JSON.parse(resp))
     }
   }
 

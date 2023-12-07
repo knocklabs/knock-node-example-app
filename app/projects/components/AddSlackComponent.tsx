@@ -13,7 +13,6 @@ const AddSlackComponent = ({ projectId, tenantId = "tenant12345" }) => {
     client_id: process.env.BLITZ_PUBLIC_SLACK_CLIENT_ID,
     scope: "chat:write,chat:write.public,channels:read",
   } as Record<string, string>
-  console.log(params1)
   const params = new URLSearchParams(params1)
 
   // Generated with https://api.slack.com/docs/slack-button
