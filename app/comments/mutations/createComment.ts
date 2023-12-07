@@ -74,8 +74,7 @@ export default resolver.pipe(
 
       /*
       TODO: ADD KNOCK - NOTIFY
-
-      Trigger the "new-comment" workflow in knock with the recipients and necessary data
+      Trigger the "new-comment" workflow and inline-identify the recipients
       */
 
       return { comment, recipients }

@@ -67,7 +67,7 @@ export default resolver.pipe(
     /*
     TODO: ADD KNOCK - NOTIFY
 
-    Add a Knock call to trigger the "new-asset" workflow to the recipients above
+    Add a Knock call to trigger the "new-asset" workflow and inline-identify the recipients
     */
 
     return { asset, notify }

@@ -68,16 +68,18 @@ This branch of the Knock example app doesn't have Knock added yet. Throughout th
 
 1. [Identify users on Knock](https://docs.knock.app/managing-recipients/identifying-recipients)
 2. [Trigger workflows on Knock](https://docs.knock.app/send-notifications/triggering-workflows)
-3. [Set user preferences on Knock](https://docs.knock.app/managing-recipients/setting-preferences)
-4. [Render a notification feed](https://docs.knock.app/in-app-ui/react/feed)
+3. [Inline identify users](https://docs.knock.app/reference#trigger-workflow-inline-identify)
+4. [Set user preferences on Knock](https://docs.knock.app/managing-recipients/setting-preferences)
+5. [Render a notification feed](https://docs.knock.app/in-app-ui/react/feed)
 
 ### Recommended order of steps
 
 Setup: make sure you go through the steps in `Using the example app` above to make sure you have a Knock account with the required workflows and you have your environment variables available here.
 
-1. Identify users and trigger the following workflows:
+1. Identify users as they log in
+2. Trigger the following workflows and inline-identify the recipients:
    - `welcome` workflow for new users who sign up (`/signup.ts`)
    - `new-asset` workflow when an asset is added (`/createAsset.ts`)
    - `new-comment` workflow when a comment is added (`/createComment.ts`)
-2. Let users set preferences for their notifications
-3. Add the notification feed
+3. Let users set preferences for their notifications
+4. Add the notification feed
