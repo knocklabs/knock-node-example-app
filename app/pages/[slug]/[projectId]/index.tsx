@@ -1,5 +1,5 @@
 import { BlitzPage, useRouter, useParam, useQuery, useMutation, Link, Routes } from "blitz"
-import { Suspense } from "react"
+import { Suspense, useState } from "react"
 
 import Layout from "app/core/components/Layout"
 import AddSlackBtn from "app/projects/components/AddSlackBtn"
@@ -15,6 +15,8 @@ import CreateAssetModal from "app/projects/components/CreateAssetModal"
 import FallbackSpinner from "app/core/components/FallbackSpinner"
 import AddSlackComponent from "app/projects/components/AddSlackComponent"
 import SlackChannelsComponent from "app/projects/components/SlackChannelsComponent"
+import ConnectToSlackContainer from "app/projects/components/ConnectToSlackContainer"
+import ConnectToSlackToggle from "app/projects/components/ConnectToSlackToggle"
 
 const ProjectPageComponent = () => {
   const router = useRouter()
@@ -22,9 +24,12 @@ const ProjectPageComponent = () => {
   const id = useParam("projectId", "number")
   const [project, { refetch }] = useQuery(getProject, { id })
   const { user } = useCurrentUser()
+  const [isConnectedToSlack, setIsConnectedToSlack] = useState(false)
 
   const { isOpen, onOpen, onClose } = useDisclosure()
   const toast = useToast()
+
+  const addSlackComponent = <AddSlackComponent projectId={project.id} />
 
   const [createAssetMutation] = useMutation(createAsset, {
     onSuccess: (result) => {
@@ -94,6 +99,9 @@ const ProjectPageComponent = () => {
               </Box>
             ))}
           </Flex>
+          <Flex ml={4}>
+            <ConnectToSlackContainer actionButton={addSlackComponent} />
+          </Flex>
         </Flex>
         <Flex direction="column" p={6}>
           <Flex mb={4}>
@@ -102,8 +110,15 @@ const ProjectPageComponent = () => {
                 Connected to: {project.slackChannel}
               </Text>
             ) : (
-              <AddSlackComponent projectId={project.id} />
+              addSlackComponent
             )}
+          </Flex>
+          <Flex mb={4}>
+            <ConnectToSlackToggle
+              showLabel={true}
+              isChecked={isConnectedToSlack}
+              handleToggle={() => setIsConnectedToSlack((state) => !state)}
+            />
           </Flex>
           <SlackChannelsComponent user={user} />
         </Flex>

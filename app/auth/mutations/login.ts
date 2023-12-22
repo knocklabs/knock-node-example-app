@@ -3,6 +3,7 @@ import db from "db"
 import { Login } from "../validations"
 import { Role } from "types"
 import { Knock } from "@knocklabs/node"
+import jwt from "jsonwebtoken"
 
 const knockClient = new Knock(process.env.KNOCK_API_KEY, {
   host: process.env.KNOCK_API_URL,
@@ -23,13 +24,45 @@ export const authenticateUser = async (rawEmail: string, rawPassword: string) =>
     await db.user.update({ where: { id: user.id }, data: { hashedPassword: improvedHash } })
   }
 
+  const signingKey = process.env.KNOCK_SIGNING_KEY
+  // JWT NumericDates specified in seconds:
+  const currentTime = Math.floor(Date.now() / 1000)
+
+  // Default to 1 hour from now
+  const expireInSeconds = 60 * 60
+
+  // Get objects user needs access to within the project (?)
+  // add to the grants
+  // Store token in local storage
+  // pull it out when sending this request
+  const token = jwt.sign(
+    {
+      sub: user.id.toString(),
+      iat: currentTime,
+      exp: currentTime + expireInSeconds,
+      grants: {
+        "https://api.knock.app/v1/objects/$tenants/tenant12345": {
+          "slack_channels/read": [{}],
+        },
+        "https://api.knock.app/v1/objects/projects2/slack_chann_test": {
+          "channel_data/read": [{}],
+        },
+      },
+    },
+    signingKey,
+    {
+      algorithm: "RS256",
+    }
+  )
+
+  console.log(token)
   const { hashedPassword, ...rest } = user
 
   // Identify the user - this should have happened in the seed file already but we're doing it
   // here in case of changes to the environment/API key
   await knockClient.users.identify(`${user.id}`, { email: user.email, name: user.name })
 
-  return rest
+  return { token, ...rest }
 }
 
 export default resolver.pipe(resolver.zod(Login), async ({ email, password }, ctx) => {

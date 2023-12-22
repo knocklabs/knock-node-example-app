@@ -1,0 +1,28 @@
+.container {
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+.text {
+  margin-right: 8px;
+  margin-left: auto;
+}
+
+.connectContainer {
+  display: flex;
+  overflow: hidden;
+  margin-right: 5px;
+}
+
+.connect {
+  transform: translateX(20px);
+  display: inline-block;
+  overflow: hidden;
+  vertical-align: bottom;
+  transition: transform 0.1s linear;
+}
+
+.connected {
+  transform: translateX(0);
+}

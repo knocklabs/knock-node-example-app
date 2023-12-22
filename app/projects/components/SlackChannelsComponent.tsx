@@ -15,22 +15,34 @@ const SlackChannelsComponent = ({
 }) => {
   const [channels, setChannels] = useState<SlackChannel[]>([])
   const [loading, setLoading] = useState(false)
+
+  const userToken = localStorage.getItem(`x-knock-user-token`)
+  console.log(userToken)
   const knockClient = useMemo(() => {
     const knock = new Knock(process.env.BLITZ_PUBLIC_KNOCK_CLIENT_ID!, {
       host: process.env.BLITZ_PUBLIC_KNOCK_API_URL,
     })
-    knock.authenticate(user.id, user.access_token)
+    knock.authenticate(user.id, userToken)
 
     return knock
-  }, [user.id, user.access_token])
+  }, [user.id, userToken])
 
   const getChannels = useCallback(() => {
+    const accessTokenObject = {
+      objectId: tenantId,
+      collection: "$tenants",
+    }
+
+    const connectionsObject = {
+      objectId,
+      collection,
+    }
+
     setLoading(true)
     knockClient.slack
       .getChannels({
-        tenantId,
-        objectId,
-        collection,
+        accessTokenObject,
+        connectionsObject,
         knockChannelId: process.env.BLITZ_PUBLIC_KNOCK_SLACK_CHANNEL_ID!,
       })
       .then((res) => {

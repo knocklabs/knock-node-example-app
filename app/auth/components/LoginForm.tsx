@@ -37,6 +37,7 @@ export const LoginForm = (props: LoginFormProps) => {
             onSubmit={async (values) => {
               try {
                 const user = await loginMutation(values)
+                localStorage.setItem(`x-knock-user-token`, user.token)
                 if (analytics.ENABLE_SEGMENT) {
                   analytics.identify(user)
                 }

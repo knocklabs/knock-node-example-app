@@ -41,7 +41,8 @@
     "react": "18.0.0",
     "react-dom": "18.0.0",
     "react-icons": "4.4.0",
-    "zod": "3.14.4"
+    "zod": "3.14.4",
+    "jsonwebtoken": "^9.0.0"
   },
   "devDependencies": {
     "@types/preview-email": "2.0.1",
