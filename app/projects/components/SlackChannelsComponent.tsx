@@ -1,5 +1,6 @@
 import Knock from "@knocklabs/client"
 import { useCallback, useEffect, useMemo, useState } from "react"
+import { Channel, useSlackChannels } from "./useSlackChannels"
 
 type SlackChannel = {
   name: string
@@ -13,11 +14,9 @@ const SlackChannelsComponent = ({
   objectId = "slack_chann_test",
   collection = "projects2",
 }) => {
-  const [channels, setChannels] = useState<SlackChannel[]>([])
-  const [loading, setLoading] = useState(false)
-
+  const [selectedChannels, setSelectedChannels] = useState<Channel[]>([])
   const userToken = localStorage.getItem(`x-knock-user-token`)
-  console.log(userToken)
+
   const knockClient = useMemo(() => {
     const knock = new Knock(process.env.BLITZ_PUBLIC_KNOCK_CLIENT_ID!, {
       host: process.env.BLITZ_PUBLIC_KNOCK_API_URL,
@@ -27,31 +26,13 @@ const SlackChannelsComponent = ({
     return knock
   }, [user.id, userToken])
 
-  const getChannels = useCallback(() => {
-    const accessTokenObject = {
-      objectId: tenantId,
-      collection: "$tenants",
-    }
-
-    const connectionsObject = {
-      objectId,
-      collection,
-    }
-
-    setLoading(true)
-    knockClient.slack
-      .getChannels({
-        accessTokenObject,
-        connectionsObject,
-        knockChannelId: process.env.BLITZ_PUBLIC_KNOCK_SLACK_CHANNEL_ID!,
-      })
-      .then((res) => {
-        const { channels } = res
-
-        setChannels(channels)
-        setLoading(false)
-      })
-  }, [collection, knockClient.slack, objectId, tenantId])
+  const { data, isLoading, error } = useSlackChannels({
+    tenantId,
+    objectId,
+    collection,
+    knockClient,
+  })
+  const { channels } = data
 
   const handleCheckboxChange = (channelId: string) => {
     const channelToUpdate = channels.find((ch) => ch.id === channelId)
@@ -59,7 +40,7 @@ const SlackChannelsComponent = ({
       const updatedChannels = channels.map((ch) =>
         ch.id === channelId ? { ...ch, connected: !ch.connected } : ch
       )
-      setChannels(updatedChannels)
+      setSelectedChannels(updatedChannels)
 
       const channelsToSendToKnock = updatedChannels
         .filter((channel) => channel.connected)
@@ -70,18 +51,14 @@ const SlackChannelsComponent = ({
           }
         })
 
-      knockClient.slack
-        .setChannelConnections({
-          objectId,
-          collection,
-          knockChannelId: process.env.BLITZ_PUBLIC_KNOCK_SLACK_CHANNEL_ID!,
-          slackChannelId: channelId,
-          connections: channelsToSendToKnock,
-          userId: user.id,
-        })
-        .then((res) => {
-          console.log("set result channels", res)
-        })
+      knockClient.slack.setChannelConnections({
+        objectId,
+        collection,
+        knockChannelId: process.env.BLITZ_PUBLIC_KNOCK_SLACK_CHANNEL_ID!,
+        slackChannelId: channelId,
+        connections: channelsToSendToKnock,
+        userId: user.id,
+      })
     }
   }
 
@@ -89,28 +66,11 @@ const SlackChannelsComponent = ({
     <div
       style={{
         padding: "30px",
-        borderWidth: "4px",
-        borderColor: "black",
-        borderRadius: "8px",
         width: "200px",
       }}
     >
-      <header style={{ fontWeight: "900", marginBottom: "8px" }}>Channels</header>
       <div>
-        <button
-          onClick={getChannels}
-          style={{
-            borderRadius: "8px",
-            background: "orange",
-            padding: "4px",
-            cursor: "pointer",
-            marginTop: "4px",
-            marginBottom: "8px",
-          }}
-        >
-          Get channels
-        </button>
-        {loading ? (
+        {isLoading ? (
           <div>
             <text>Loading channels...</text>
           </div>
@@ -125,9 +85,6 @@ const SlackChannelsComponent = ({
                   alignItems: "center",
                   marginBottom: "10px",
                   padding: "4px",
-                  borderBottomWidth: "2px",
-                  borderLeftWidth: "2px",
-                  borderRightWidth: "2px",
                 }}
               >
                 <div className="flex-item" style={{ width: "80px" }}>

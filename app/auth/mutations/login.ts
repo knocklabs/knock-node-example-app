@@ -42,7 +42,7 @@ export const authenticateUser = async (rawEmail: string, rawPassword: string) =>
       exp: currentTime + expireInSeconds,
       grants: {
         "https://api.knock.app/v1/objects/$tenants/tenant12345": {
-          "slack_channels/read": [{}],
+          "slack/channels_read": [{}],
         },
         "https://api.knock.app/v1/objects/projects2/slack_chann_test": {
           "channel_data/read": [{}],
@@ -55,7 +55,6 @@ export const authenticateUser = async (rawEmail: string, rawPassword: string) =>
     }
   )
 
-  console.log(token)
   const { hashedPassword, ...rest } = user
 
   // Identify the user - this should have happened in the seed file already but we're doing it

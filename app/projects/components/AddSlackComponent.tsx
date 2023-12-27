@@ -8,13 +8,13 @@ const AddSlackComponent = ({ projectId, tenantId = "tenant12345" }) => {
     state: JSON.stringify({
       redirect_url: "http://localhost:3001/ingen/1",
       project_id: projectId,
-      tenant_id: tenantId,
+      access_token_object: { object_id: tenantId, collection: "$tenants" },
       channel_id: process.env.BLITZ_PUBLIC_KNOCK_SLACK_CHANNEL_ID,
       public_key: process.env.BLITZ_PUBLIC_KNOCK_CLIENT_ID,
-      user_token: process.env.BLITZ_PUBLIC_USER_TOKEN,
+      user_token: localStorage.getItem(`x-knock-user-token`),
     }),
     client_id: process.env.BLITZ_PUBLIC_SLACK_CLIENT_ID,
-    scope: "chat:write,chat:write.public,channels:read",
+    scope: "chat:write,chat:write.public,channels:read,groups:read",
   } as Record<string, string>
   const params = new URLSearchParams(params1)
 
