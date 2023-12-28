@@ -2,7 +2,6 @@ import { BlitzPage, useRouter, useParam, useQuery, useMutation, Link, Routes } f
 import { Suspense, useState } from "react"
 
 import Layout from "app/core/components/Layout"
-import AddSlackBtn from "app/projects/components/AddSlackBtn"
 import getProject from "app/projects/queries/getProject"
 import toggleMuted from "app/projects/mutations/toggleMuted"
 import createAsset from "app/assets/mutations/createAsset"
@@ -13,10 +12,10 @@ import { AspectRatio, Box, Flex, Heading, ListItem, Text, UnorderedList } from "
 import { Switch, Image, Button, useDisclosure, useToast } from "@chakra-ui/react"
 import CreateAssetModal from "app/projects/components/CreateAssetModal"
 import FallbackSpinner from "app/core/components/FallbackSpinner"
-import AddSlackComponent from "app/projects/components/AddSlackComponent"
-import SlackChannelsComponent from "app/projects/components/SlackChannelsComponent"
+import ConnectedSlackChannelPicker from "app/projects/components/ConnectedSlackChannelPicker"
 import ConnectToSlackContainer from "app/projects/components/ConnectToSlackContainer"
 import ConnectToSlackToggle from "app/projects/components/ConnectToSlackToggle"
+import ConnectToSlackButton from "app/projects/components/ConnectToSlackButton"
 
 const ProjectPageComponent = () => {
   const router = useRouter()
@@ -29,7 +28,7 @@ const ProjectPageComponent = () => {
   const { isOpen, onOpen, onClose } = useDisclosure()
   const toast = useToast()
 
-  const addSlackComponent = <AddSlackComponent projectId={project.id} />
+  const ConnectToSlackBtn = <ConnectToSlackButton projectId={project.id} />
 
   const [createAssetMutation] = useMutation(createAsset, {
     onSuccess: (result) => {
@@ -100,7 +99,7 @@ const ProjectPageComponent = () => {
             ))}
           </Flex>
           <Flex ml={4}>
-            <ConnectToSlackContainer actionButton={addSlackComponent} />
+            <ConnectToSlackContainer actionButton={ConnectToSlackBtn} />
           </Flex>
         </Flex>
         <Flex direction="column" p={6}>
@@ -110,7 +109,7 @@ const ProjectPageComponent = () => {
                 Connected to: {project.slackChannel}
               </Text>
             ) : (
-              addSlackComponent
+              ConnectToSlackBtn
             )}
           </Flex>
           <Flex mb={4}>
@@ -120,7 +119,20 @@ const ProjectPageComponent = () => {
               handleToggle={() => setIsConnectedToSlack((state) => !state)}
             />
           </Flex>
-          <SlackChannelsComponent user={user} />
+          <ConnectedSlackChannelPicker
+            user={user}
+            accessTokenObject={{
+              objectId: "tenant12345",
+              collection: "$tenants",
+            }}
+            connectionsObject={{
+              objectId: "slack_chann_test",
+              collection: "projects2",
+            }}
+            knockClientId={process.env.BLITZ_PUBLIC_KNOCK_CLIENT_ID}
+            host={process.env.BLITZ_PUBLIC_KNOCK_API_URL}
+            userToken={localStorage.getItem(`x-knock-user-token`)}
+          />
         </Flex>
         <Flex
           width="400px"

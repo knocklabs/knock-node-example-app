@@ -1,0 +1,40 @@
+.multiSelectAccordion {
+  border: 1px solid #e4e8ee;
+  border-radius: 4px;
+  color: #1a1f36;
+  font-size: 11px;
+  box-shadow: 0px 4px 6px -1px rgba(0, 0, 0, 0.1), 0px 2px 4px -1px rgba(0, 0, 0, 0);
+}
+
+.option {
+  padding: 8px 12px;
+  cursor: pointer;
+  border-bottom: 1px solid #ccc;
+  display: flex;
+  align-items: center;
+}
+
+.option:last-child {
+  border-bottom: none;
+}
+
+.selected {
+  background-color: #e4e8fc; /* Change this to the color you prefer for selected options */
+}
+
+.option:hover {
+  background-color: #f0f0f0; /* Change this for hover effect */
+}
+
+.disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
+.disabled:hover {
+  background-color: white !important;
+}
+
+.icon {
+  margin-left: auto;
+}

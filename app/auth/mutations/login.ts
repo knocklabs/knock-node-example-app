@@ -46,6 +46,7 @@ export const authenticateUser = async (rawEmail: string, rawPassword: string) =>
         },
         "https://api.knock.app/v1/objects/projects2/slack_chann_test": {
           "channel_data/read": [{}],
+          "channel_data/write": [{}],
         },
       },
     },
