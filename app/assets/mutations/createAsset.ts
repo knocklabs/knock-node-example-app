@@ -65,9 +65,10 @@ export default resolver.pipe(
     const notify = { success: false, workflow: NEW_ASSET }
 
     /*
-    TODO: ADD KNOCK - NOTIFY
+    TODO: ADD KNOCK - TRIGGER WORKFLOW
 
-    Add a Knock call to trigger the "new-asset" workflow and inline-identify the recipients
+    Add a Knock call to trigger the "new-asset" workflow and inline-identify the recipients.
+    Check the return value for a "workflow_run_id" and if it's present, set notify.success to true
     */
 
     return { asset, notify }
