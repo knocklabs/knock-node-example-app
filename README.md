@@ -35,6 +35,8 @@ cd knock-node-example-app
 
 **2. Install dependencies**
 
+This project requires Node.js version 16, so use `nvm` or your chosen version manager to enable this version on your local machine.
+
 ```
 yarn
 ```
@@ -54,10 +56,22 @@ Here's more context on where to find the Knock variables:
 - [Knock in-app feed channel ID](https://docs.knock.app/in-app-ui/react/feed#getting-started)
 - [Knock Slack channel ID](https://docs.knock.app/integrations/chat/slack/building-oauth-flow#how-to-set-slack-channel-data-in-knock)
 
-**4. If necessary, install and start postgres**
+**4. Install and start Postgres**
+
+If you don't already have Postgres installed locally, run the following command to [install Postgres using Homebrew](https://wiki.postgresql.org/wiki/Homebrew):
 
 ```
 brew install postgresql
+```
+After installing Postgres, update the `DATABASE_URL` in your `.env` file. Replace the string `<YOUR_DB_USERNAME>` with the owner of the database, which should be the current user on your local machine. 
+
+```
+DATABASE_URL=postgresql://<YOUR_DB_USERNAME>@localhost:5432/example-collaboration-app
+```
+To confirm the owner of the default Postgres databases, you can run `psql postgres` to open an interactive shell and then `postgres-# \list` to list out the available databases and locate the `Owner` to use in your connection string.
+
+After updating the connection string, run the following command to start the Postgres service locally:
+```
 brew services start postgresql
 
 # Verify postgres is running

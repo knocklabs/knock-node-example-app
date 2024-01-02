@@ -27,6 +27,16 @@ export default resolver.pipe(resolver.zod(Signup), async ({ email, password, nam
           workspaceId: workspace.id,
         },
       })
+      if (workspace.projects.length > 0) {
+        await db.project_member.create({
+          data: {
+            workspaceId: workspace.id,
+            projectId: workspace.projects[0] ? workspace.projects[0]["id"] : 1,
+            userId: user.id,
+            muted: false,
+          },
+        })
+      }
     }
 
     /*
