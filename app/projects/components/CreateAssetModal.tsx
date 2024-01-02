@@ -59,7 +59,7 @@ const CreateAssetModal = ({ isOpen, onClose, createAssetMutation, slug, project 
                   Name
                 </Text>
                 <Field name="name">
-                  {({ field }) => <Input placeholder="Project Name" {...field} />}
+                  {({ field }) => <Input placeholder="Asset Name" {...field} />}
                 </Field>
               </FormControl>
               <FormControl mt={4}>
