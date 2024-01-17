@@ -28,7 +28,12 @@ const ProjectPageComponent = () => {
   const { isOpen, onOpen, onClose } = useDisclosure()
   const toast = useToast()
 
-  const ConnectToSlackBtn = <ConnectToSlackButton projectId={project.id} />
+  const ConnectToSlackBtn = (
+    <ConnectToSlackButton
+      projectId={project.id}
+      tenantId={localStorage.getItem("accessTokenObjectId")}
+    />
+  )
 
   const [createAssetMutation] = useMutation(createAsset, {
     onSuccess: (result) => {
@@ -104,30 +109,38 @@ const ProjectPageComponent = () => {
         </Flex>
         <Flex direction="column" p={6}>
           <Flex mb={4}>
-            {project.slackChannel ? (
-              <Text ml="auto" fontWeight="bold">
-                Connected to: {project.slackChannel}
-              </Text>
-            ) : (
-              ConnectToSlackBtn
-            )}
+            <div style={{ display: "flex", width: "100%" }}>
+              <div style={{ marginLeft: "auto" }}>
+                {project.slackChannel ? (
+                  <Text ml="auto" fontWeight="bold">
+                    Connected to: {project.slackChannel}
+                  </Text>
+                ) : (
+                  ConnectToSlackBtn
+                )}
+              </div>
+            </div>
           </Flex>
           <Flex mb={4}>
-            <ConnectToSlackToggle
-              showLabel={true}
-              isChecked={isConnectedToSlack}
-              handleToggle={() => setIsConnectedToSlack((state) => !state)}
-            />
+            <div style={{ display: "flex", width: "100%" }}>
+              <div style={{ marginLeft: "auto" }}>
+                <ConnectToSlackToggle
+                  showLabel={true}
+                  isChecked={isConnectedToSlack}
+                  handleToggle={() => setIsConnectedToSlack((state) => !state)}
+                />
+              </div>
+            </div>
           </Flex>
           <ConnectedSlackChannelPicker
             user={user}
             accessTokenObject={{
-              objectId: "tenant12345",
+              objectId: localStorage.getItem("accessTokenObjectId"),
               collection: "$tenants",
             }}
             connectionsObject={{
-              objectId: "slack_chann_test",
-              collection: "projects2",
+              objectId: localStorage.getItem("connectionsObjectId"),
+              collection: localStorage.getItem("connectionsCollection"),
             }}
             knockClientId={process.env.BLITZ_PUBLIC_KNOCK_CLIENT_ID}
             host={process.env.BLITZ_PUBLIC_KNOCK_API_URL}

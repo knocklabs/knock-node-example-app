@@ -3,7 +3,7 @@ import styles from "./ConnectToSlackButton.module.css"
 
 const SLACK_AUTHORIZE_URL = "https://slack.com/oauth/v2/authorize"
 
-const ConnectToSlackButton = ({ projectId, tenantId = "tenant12345" }) => {
+const ConnectToSlackButton = ({ projectId, tenantId }) => {
   const params1 = {
     state: JSON.stringify({
       redirect_url: "http://localhost:3001/ingen/1",

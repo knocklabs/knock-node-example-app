@@ -1,12 +1,11 @@
-.container {
+.outerContainer {
   display: flex;
-  align-items: center;
-  width: 100%;
 }
 
-.text {
-  margin-right: 8px;
+.innerContainer {
   margin-left: auto;
+  display: flex;
+  align-items: center;
 }
 
 .connectContainer {
@@ -25,4 +24,8 @@
 
 .connected {
   transform: translateX(0);
+}
+
+.toggleContainer {
+  margin-left: 8px;
 }

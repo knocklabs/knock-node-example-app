@@ -80,7 +80,10 @@ export default resolver.pipe(
         .map((m) => `${m.userId}`)
 
       // Add the project as a recipient for the case we are sending Slack notifications
-      recipients.push({ id: "slack_chann_test", collection: "projects2" })
+      recipients.push({
+        id: "connections-object-test",
+        collection: "projects2",
+      })
 
       // Notify recipients on Knock. This should be done asynchronously
       // (for example using background jobs, or other similar pattern).
@@ -100,6 +103,7 @@ export default resolver.pipe(
             project_name: project.name,
             projectId: project.id,
           },
+          tenant: "testing-tenant",
         })
 
         notify.success = true

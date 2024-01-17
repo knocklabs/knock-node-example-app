@@ -11,16 +11,25 @@ const ConnectToSlackToggle = ({
   handleToggle: () => void
 }) => {
   return (
-    <div className={styles.container}>
-      {showLabel && (
-        <div>
-          <div className={styles.connectContainer}>
-            <span className={`${styles.connect} ${isChecked && styles.connected}`}>Connected</span>
-          </div>
-          <span className={styles.text}> to Slack</span>
-        </div>
-      )}
-      <Switch size="md" isChecked={isChecked} onChange={handleToggle} />
+    <div className={styles.outerContainer}>
+      <div className={styles.innerContainer}>
+        {showLabel && (
+          <>
+            <div className={styles.connectContainer}>
+              <span
+                aria-label={isChecked ? "Connected" : "Connect"}
+                className={`${styles.connect} ${isChecked && styles.connected}`}
+              >
+                Connected
+              </span>
+            </div>
+            <span> to Slack</span>
+          </>
+        )}
+        <span className={styles.toggleContainer}>
+          <Switch size="md" isChecked={isChecked} onChange={handleToggle} />
+        </span>
+      </div>
     </div>
   )
 }

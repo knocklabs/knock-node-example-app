@@ -15,6 +15,8 @@ export const useSlackChannels = ({
   userToken,
   user,
   refetch,
+  setHasError,
+  hasError,
 }) => {
   const [isLoading, setIsLoading] = useState(true)
   const [data, setData] = useState<{ channels: Channel[] }>({
@@ -31,22 +33,30 @@ export const useSlackChannels = ({
   }, [host, knockClientId, user.id, userToken])
 
   useEffect(() => {
-    const fetchChannels = async () => {
-      await knockClient.slack
-        .getChannels({
-          accessTokenObject,
-          connectionsObject,
-          knockChannelId: process.env.BLITZ_PUBLIC_KNOCK_SLACK_CHANNEL_ID!,
-        })
-        .then((res) => {
-          const { channels } = res
-          setData({ channels })
-          setIsLoading(false)
-        })
-    }
+    if (!hasError) {
+      const fetchChannels = async () => {
+        try {
+          await knockClient.slack
+            .getChannels({
+              accessTokenObject,
+              connectionsObject,
+              knockChannelId: process.env.BLITZ_PUBLIC_KNOCK_SLACK_CHANNEL_ID!,
+            })
+            .then((res) => {
+              console.log(res)
+              const { channels } = res
+              setData({ channels })
+              setIsLoading(false)
+            })
+        } catch (error) {
+          console.error(error)
+          setHasError(true)
+        }
+      }
 
-    setIsLoading(true)
-    fetchChannels()
+      setIsLoading(true)
+      fetchChannels()
+    }
   }, [refetch])
 
   return { data, isLoading, error: false }

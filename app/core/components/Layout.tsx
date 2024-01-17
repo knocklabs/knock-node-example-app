@@ -75,6 +75,7 @@ const Layout: React.FC<Props> = ({ children }) => {
               apiKey={process.env.BLITZ_PUBLIC_KNOCK_CLIENT_ID!}
               feedId={process.env.BLITZ_PUBLIC_KNOCK_FEED_ID!}
               userId={`${user.id}`}
+              host="https://332a-2603-7000-873d-e800-e907-966f-2cd3-8bd4.ngrok-free.app"
             >
               <Box>
                 <NotificationIconButton ref={notifButtonRef} onClick={onOpenFeed} />

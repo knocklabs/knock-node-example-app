@@ -1,6 +1,6 @@
 import Knock from "@knocklabs/client"
 import { useMemo, useState } from "react"
-import { useSlackChannels } from "./useSlackChannels"
+import { Channel, useSlackChannels } from "./useSlackChannels"
 import styles from "./ConnectedSlackChannelPicker.module.css"
 
 interface Option {
@@ -17,8 +17,6 @@ const ConnectedSlackChannelPicker = ({
   user,
   accessTokenObject,
   connectionsObject,
-  objectId = "slack_chann_test",
-  collection = "projects2",
   knockClientId,
   host,
   userToken,
@@ -34,6 +32,8 @@ const ConnectedSlackChannelPicker = ({
 
   const [toggleForRefetch, setToggleForRefetch] = useState(false)
   const [isSettingChannels, setIsSettingChannels] = useState(false)
+  const [showChannelPicker, setShowChannelPicker] = useState(false)
+  const [hasError, setHasError] = useState(false)
 
   const {
     data,
@@ -47,12 +47,14 @@ const ConnectedSlackChannelPicker = ({
     user,
     host,
     refetch: toggleForRefetch,
+    setHasError,
+    hasError,
   })
 
   const isLoading = isSettingChannels || isLoadingSlackChannels
 
   const { channels } = data
-  console.log(channels)
+
   const handleOptionClick = async (channelId: string) => {
     setIsSettingChannels(true)
     const channelToUpdate = channels.find((ch) => ch.id === channelId)
@@ -70,20 +72,29 @@ const ConnectedSlackChannelPicker = ({
           }
         })
 
-      await knockClient.slack.setChannelConnections({
-        objectId,
-        collection,
-        knockChannelId: process.env.BLITZ_PUBLIC_KNOCK_SLACK_CHANNEL_ID!,
-        slackChannelId: channelId,
-        connections: channelsToSendToKnock,
-        userId: user.id,
-      })
-      setToggleForRefetch((state) => !state)
+      try {
+        await knockClient.slack.setChannelConnections({
+          objectId: connectionsObject.objectId,
+          collection: connectionsObject.collection,
+          knockChannelId: process.env.BLITZ_PUBLIC_KNOCK_SLACK_CHANNEL_ID!,
+          slackChannelId: channelId,
+          connections: channelsToSendToKnock,
+          userId: user.id,
+        })
+        setToggleForRefetch((state) => !state)
+      } catch (error) {
+        setHasError(true)
+        setShowChannelPicker(false)
+      }
       setIsSettingChannels(false)
     }
   }
 
   const channelsConnectedMessage = () => {
+    if (hasError) {
+      return "Error fetching channels"
+    }
+
     if (isLoading) {
       return "Loading..."
     }
@@ -95,7 +106,7 @@ const ConnectedSlackChannelPicker = ({
     }
 
     if (numberConnectedChannels === 1) {
-      const connectedChannel = channels.find((channel) => channel.connected)
+      const connectedChannel = channels.find((channel) => channel.connected) as Channel
       return `#${connectedChannel.name}`
     }
 
@@ -108,18 +119,61 @@ const ConnectedSlackChannelPicker = ({
       }}
     >
       <div>
-        {isLoading && !channels.length ? (
-          <div>
-            <text>Loading channels...</text>
+        <div className={styles.multiSelectAccordion}>
+          <div
+            key={"select"}
+            className={styles.header}
+            onClick={() => {
+              if (!hasError) {
+                setShowChannelPicker(!showChannelPicker)
+              }
+            }}
+          >
+            {channelsConnectedMessage()}
+            {!hasError && (
+              <span className={styles.icon}>
+                {showChannelPicker ? (
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="16"
+                    height="16"
+                    viewBox="0 0 512 512"
+                  >
+                    <g transform="translate(0 512) scale(1 -1)">
+                      <path
+                        fill="none"
+                        stroke="black"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth="48"
+                        d="m112 184l144 144l144-144"
+                      />
+                    </g>
+                  </svg>
+                ) : (
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="16"
+                    height="16"
+                    viewBox="0 0 512 512"
+                  >
+                    <path
+                      fill="none"
+                      stroke="black"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="48"
+                      d="m112 184l144 144l144-144"
+                    />
+                  </svg>
+                )}
+              </span>
+            )}
           </div>
-        ) : (
-          <div>
-            <div
-              key={"select"}
-              className={`${styles.option}`}
-              onClick={() => console.log("click")}
-            ></div>
-            <div className={styles.multiSelectAccordion}>
+        </div>
+        {!!showChannelPicker && (
+          <div className={styles.multiSelectAccordion}>
+            <div className={styles.optionsContainer}>
               {channels.map((channel) => (
                 <div
                   key={channel.id}

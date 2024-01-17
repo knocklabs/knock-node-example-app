@@ -35,16 +35,19 @@ export const authenticateUser = async (rawEmail: string, rawPassword: string) =>
   // add to the grants
   // Store token in local storage
   // pull it out when sending this request
+  const accessTokenObjectId = "testing-tenant"
+  const connectionsCollection = "projects2"
+  const connectionsObjectId = "connections-object-test"
   const token = jwt.sign(
     {
       sub: user.id.toString(),
       iat: currentTime,
       exp: currentTime + expireInSeconds,
       grants: {
-        "https://api.knock.app/v1/objects/$tenants/tenant12345": {
+        "https://api.knock.app/v1/objects/$tenants/testing-tenant": {
           "slack/channels_read": [{}],
         },
-        "https://api.knock.app/v1/objects/projects2/slack_chann_test": {
+        "https://api.knock.app/v1/objects/projects2/connections-object-test": {
           "channel_data/read": [{}],
           "channel_data/write": [{}],
         },
@@ -62,7 +65,7 @@ export const authenticateUser = async (rawEmail: string, rawPassword: string) =>
   // here in case of changes to the environment/API key
   await knockClient.users.identify(`${user.id}`, { email: user.email, name: user.name })
 
-  return { token, ...rest }
+  return { connectionsObjectId, connectionsCollection, accessTokenObjectId, token, ...rest }
 }
 
 export default resolver.pipe(resolver.zod(Login), async ({ email, password }, ctx) => {

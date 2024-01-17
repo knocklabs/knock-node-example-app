@@ -38,6 +38,9 @@ export const LoginForm = (props: LoginFormProps) => {
               try {
                 const user = await loginMutation(values)
                 localStorage.setItem(`x-knock-user-token`, user.token)
+                localStorage.setItem("accessTokenObjectId", user.accessTokenObjectId)
+                localStorage.setItem("connectionsObjectId", user.connectionsObjectId)
+                localStorage.setItem("connectionsCollection", user.connectionsCollection)
                 if (analytics.ENABLE_SEGMENT) {
                   analytics.identify(user)
                 }
