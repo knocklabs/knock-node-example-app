@@ -3,6 +3,8 @@
 ## Archive notice
 As of March 2024, this repository has been moved to a read-only archive. It's still usable and contains useful information, but we'll be porting this application to a newer version of Next.js in the very near future. In the meantime, you can check out the [example apps section](https://docs.knock.app/getting-started/example-app) of the Knock docs for a list of our example apps.
 
+## About
+
 This example app uses [Knock](https://knock.app) to power cross channel notifications via email, an in-app feed, and Slack inside of a full-stack Node application, written in [Blitz.js](https://blitzjs.com/). It uses the [Knock Node SDK](https://github.com/knocklabs/knock-node) and [React in-app feed components](https://github.com/knocklabs/react-notification-feed).
 
 You can read more about this example app [in the Knock documentation](https://docs.knock.app/getting-started/example-app#nodejs-example-app).
